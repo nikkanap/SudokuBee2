@@ -77,6 +77,7 @@ public class SudokuBee extends Thread{
 				} catch(Exception ee){
 					start=true;
 				}
+
 				popUp(size);
 			}
 		});
@@ -100,9 +101,11 @@ public class SudokuBee extends Thread{
 				isAns=false;
 				int size=(options.sz+2)*3;
 				isSolved=false;
+				
 				board(new int[size][size][2], true);
 				game.setVisible(false);
 				status("create");
+
 				popUp(size);
 			}
 		});
@@ -132,7 +135,7 @@ public class SudokuBee extends Thread{
 	}
 
 	// for loading a saved sudoku game
-	// USED IN menu()
+	// USED IN menu() and status()
 	private void loadSudoku(int num){
 		// keeps the main menu on
 		GP.setVisible(num);
@@ -156,7 +159,7 @@ public class SudokuBee extends Thread{
 				catch(Exception ee){}
 				GP.setVisibleButton(true);
 				load.decompose();
-				load=null;
+				load = null;
 				GP.setVisible(number);
 			}
 		});
@@ -166,7 +169,7 @@ public class SudokuBee extends Thread{
 			public void actionPerformed(ActionEvent e){
 				open(load.lists.getSelectedValue()+"");
 				load.decompose();
-				load=null;
+				load = null;
 			}
 		});
 	}
@@ -183,8 +186,8 @@ public class SudokuBee extends Thread{
 
 			mainGame();
 			status("");
-			isAns=true;
-			board=null;
+			isAns = true;
+			board = null;
 			board(sod.getArray(), false);
 			popUp(sod.getSize());
 		}
@@ -192,28 +195,28 @@ public class SudokuBee extends Thread{
 			exit(3);
 		}
 
-		sod=null;
+		sod = null;
 	}
 
-
+	// generates the sudoku board
+	// USED IN menu(), open(), run(), status(), exit()
 	private void board(int sudokuArray[][][], boolean isNull){
-		// load panel 5
+		// load panel 5 (most likely panel for the board)
 		GP.setVisible(5); 
 
-		// create a UI board
+		// create the board UI
 		board = new UIBoard(sudokuArray, isNull, GP.panel[5]);
-		int size=board.getSize();
+		int size = board.getSize();
 
-		for(btnX=0; btnX<size; btnX++){
-			for(btnY=0; btnY<size; btnY++){
-
-				if(board.getStatus(btnX, btnY)!=0){
-					final int x=btnX;
-					final int y=btnY;
+		for(btnX = 0; btnX<size; btnX++){
+			for(btnY = 0; btnY<size; btnY++){
+				if(board.getStatus(btnX, btnY) != 0){
+					final int x = btnX;
+					final int y = btnY;
 
 					board.btn[btnX][btnY].addMouseListener(new MouseAdapter(){
 						public void mouseClicked(MouseEvent e){
-							if(!isSolved && e.getModifiers()==4){
+							if(!isSolved && e.getModifiers() == 4){
 								pop.setVisible(true, x, y, board.getValue(x, y));
 								status.setVisible(false);
 								game.setVisible(false);
@@ -223,13 +226,13 @@ public class SudokuBee extends Thread{
 				}
 			}
 		}
-
 	}
 		
+	// USED IN menu(), open(), status(), exit() 
 	private void popUp(int size){
 		try{
 			pop.decompose();
-			pop=null;
+			pop = null;
 		} catch(Exception e){}
 
 		pop = new UIPop(size, GP.panel[3]);
@@ -238,12 +241,16 @@ public class SudokuBee extends Thread{
 
 			pop.btn[ctr].addActionListener(new ActionListener(){
 				public void actionPerformed(ActionEvent e){
+					System.out.println("entered a popup");
 					int size = pop.size;
 					GP.changePicture(board.btn[pop.btnX][pop.btnY],"img/box/"+size+"x"+size+"/normal/"+popCounter+".png");
 					board.setSudokuArray(popCounter, isAns,pop.btnX, pop.btnY);
+					
 					pop.field.setForeground(java.awt.Color.black);
 					pop.setVisible(false,0,0,0);
+					
 					status.setVisible(true);
+					
 					game.setVisible(isAns);
 
 					if(isAns && board.getAns() == size*size){

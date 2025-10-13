@@ -21,10 +21,11 @@ public class UIBoard{
 		setConstants(false);
 	}
 
-	UIBoard(int sudokuArray[][][],boolean isNull, JPanel pane){
+	UIBoard(int sudokuArray[][][], boolean isNull, JPanel pane){
 		this.pane = pane;
 		this.sudokuArray = sudokuArray;
 		ans = 0;
+
 		if(isNull)
 			fill();
 		setConstants(true);
@@ -32,8 +33,8 @@ public class UIBoard{
 
 	private void fill(){
 		size = sudokuArray.length;
-		for(int ctr = 0; ctr<size;ctr++){
-			for(int count = 0; count<size;count++){
+		for(int ctr = 0; ctr<size; ctr++){
+			for(int count = 0; count<size; count++){
 				sudokuArray[ctr][count][0] = 0;
 				sudokuArray[ctr][count][1] = 1;
 			}
@@ -46,16 +47,19 @@ public class UIBoard{
 		startY = 86;
 		inc = increment[size/3-2];
 		btn = new JButton[size][size];
+		
 		for(int ctr = 0, X = startX, Y = startY; ctr<size; ctr++, Y += inc, X = startX){
 			for(int count = 0; count<size; count++, X += inc){
 				String img = "normal";
 				if(sudokuArray[ctr][count][1] == 0)
 					img = "given";
 				btn[ctr][count] = gp.gameButton(pane, "img/box/"+size+"x"+size+"/"+img+"/"+sudokuArray[ctr][count][0]+".png", X, Y);
+				
 				if(setCursor && img.equals("normal"))
 					btn[ctr][count].setCursor(new Cursor(12));
 				else
 					btn[ctr][count].setCursor(new Cursor(0));
+				
 				if(sudokuArray[ctr][count][0] != 0)
 					ans++;
 			}
