@@ -1,14 +1,14 @@
 import java.applet.AudioClip;
 import java.net.MalformedURLException;
 
+// audio. self explanatory lol
 public class Tunog{
 	private AudioClip sample;
 	
 	Tunog(String fname){
 		try {
 			sample = java.applet.Applet.newAudioClip(new java.net.URL("file:"+fname));
-		} catch(MalformedURLException e){
-		}
+		} catch(MalformedURLException e){}
 	}
 
 	public void play(){

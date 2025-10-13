@@ -54,6 +54,7 @@ public class SudokuBee extends Thread{
 	}
 
 	private void menu(){
+		// opening up a general panel for a bunch of stuff
 		GP = new generalPanel(container);
 
 		// action listener for the play button
@@ -84,7 +85,8 @@ public class SudokuBee extends Thread{
 		GP.open.addActionListener(new ActionListener(){
 			public void actionPerformed(ActionEvent e){
 				GP.setVisibleButton(false);
-				int size=(options.sz+2)*3;
+
+				int size=(options.sz + 2) * 3;
 				isSolved=false;
 				board(new int[size][size][2], true);
 				loadSudoku(7);
@@ -130,9 +132,12 @@ public class SudokuBee extends Thread{
 	}
 
 	// for loading a saved sudoku game
+	// USED IN menu()
 	private void loadSudoku(int num){
-		// 
+		// keeps the main menu on
 		GP.setVisible(num);
+
+		// loading the UILoad on the GP.solve panel
 		load = new UILoad(GP.solve); // don't question this. I did and it still doesn't make sense - Nikka
 		load.lists.grabFocus();
 		final int number = num;
@@ -166,8 +171,10 @@ public class SudokuBee extends Thread{
 		});
 	}
 
+	// USED IN loadSudoku()
 	private void open(String str){
-		LoadSudoku sod=new LoadSudoku("save/"+str+".sav");
+		LoadSudoku sod = new LoadSudoku("save/"+str+".sav");
+
 		if (sod.getStatus()){
 			board.decompose();
 			try{
@@ -181,14 +188,19 @@ public class SudokuBee extends Thread{
 			board(sod.getArray(), false);
 			popUp(sod.getSize());
 		}
-		else{
+		else {
 			exit(3);
 		}
+
 		sod=null;
 	}
 
+
 	private void board(int sudokuArray[][][], boolean isNull){
-		GP.setVisible(5);
+		// load panel 5
+		GP.setVisible(5); 
+
+		// create a UI board
 		board = new UIBoard(sudokuArray, isNull, GP.panel[5]);
 		int size=board.getSize();
 

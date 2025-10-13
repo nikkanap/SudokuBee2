@@ -16,15 +16,16 @@ public class UIOptions extends generalPanel{
 
 	protected int sz, lvl, snd, num;
 
+	// the UI for the options (settings)
 	UIOptions(JPanel panel[]){
 		this.panel = panel;
 		panel[1].setOpaque(true);
 		exit = addButton(panel[1], "img/exit/okay.png", "img/exit/h_okay.png",385,401);
 
-		for(int ctr  =  0; ctr<2; ctr++){
+		for(int ctr = 0; ctr<2 ; ctr++){
 			left[ctr] = addButton(panel[1], "img/exit/left.png", "img/exit/h_left.png",356,235+70*ctr);
 			right[ctr] = addButton(panel[1], "img/exit/right.png", "img/exit/h_right.png",568,235+70*ctr);
-			}
+		}
 
 		sizeLabel = addLabel(panel[1], size[1], 389,237);
 		soundLabel = addLabel(panel[1], sound[0], 389,308);
