@@ -1,12 +1,14 @@
 import java.lang.Math;
 import java.util.Random;
 import javax.swing.JPanel;
+
 class ABC extends Thread{
 	private int[][][] problem;
 	private int[][] emptyCell;
 	private int maxCycle, cycle;
 	private int employedSize, numCell, onlookerSize, scoutSize, maxEmptyCell, fitestBee=-1;
 	private double maxFit=0;
+
 	private Bee[] bee;
 	private Bee bestBee;
 	private Subgrid[] subgrid;
@@ -23,6 +25,7 @@ class ABC extends Thread{
 		this.employedSize=employedSize;
 		this.onlookerSize=onlookerSize;
 		this.printer=printer;
+
 		numCell=problem.length*problem.length;
 		scoutSize=(int)(0.1*employedSize);
 		initialization();
@@ -43,12 +46,13 @@ class ABC extends Thread{
 				beeFitness=bee[i].getFitness();
 				maxFit=getMaxFit(maxFit, beeFitness, i);		//storing of bestbee
 				sumFitness=sumFitness+beeFitness;
-				}
+			}
 
 			//onlooker bee phase
 			for(int i=0; i<bee.length && maxFit!=1; i++){
 				double probability=bee[i].getFitness()/sumFitness;
 				int maxOnlooker=(int)((probability)*onlookerSize);
+
 				for(int count=0; count<maxOnlooker; count++){
 					v=neighborhoodSearch(i);											// neighborhood search
 					bee[i]=greedy.greedySearch(bee[i],v);						//greedy
@@ -61,34 +65,39 @@ class ABC extends Thread{
 				int minSet[]=new int[scoutSize];	//a set of indices containing the minimum fitness of scoutSize bees
 				for(int i=0; i<scoutSize; i++){
 					minSet[i]=i;
+
 					if(maxMin>bee[i].getFitness())
 						maxMin=bee[i].getFitness();
-					}
+				}
+
 				for(int i=scoutSize; i<bee.length; i++){
 					if(maxMin>=bee[i].getFitness()){
 						boolean hasBeenPopped=false;
 						double temp=bee[i].getFitness();
+
 						for(int ctr=0; ctr<scoutSize; ctr++){
 							double curFitness=bee[minSet[ctr]].getFitness();
 							if(temp<curFitness)
 								temp=curFitness;
+
 							if(!hasBeenPopped && curFitness==maxMin){
 								hasBeenPopped=true;
 								minSet[ctr]=i;
-								}
 							}
-						maxMin=temp;
 						}
+						maxMin=temp;
 					}
+				}
+
 				for(int i=0; i<scoutSize && maxFit!=1; i++){
 					v=new Bee(getProblemCopy(), subgrid);											//generating of new Solution
 					bee[minSet[i]]=greedy.greedySearch(bee[minSet[i]],v);					//greedy
 					maxFit=getMaxFit(maxFit, bee[minSet[i]].getFitness(), minSet[i]);	//storing of best bee
-					}
 				}
+			}
 			printer.print((cycle+1)+"\t"+bestBee.getFitness());
 			v=null;
-			}
+		}
 		printer.print((cycle)+"\t"+bestBee.getFitness());
 	}
 	
@@ -107,7 +116,7 @@ class ABC extends Thread{
 			subgrid[ctr]=new Subgrid(xCount*subDimX, ((ctr/subDimY)*subDimY), subDimX, subDimY);
 			if((ctr+1)%subDimY==0 && ctr>0)
 				xCount=-1;
-			}
+		}
 
 		//Initialization of population
 		bee=new Bee[employedSize];
@@ -115,9 +124,10 @@ class ABC extends Thread{
 		for(int ctr=0; ctr<employedSize; ctr++){
 			bee[ctr]=new Bee(getProblemCopy(), subgrid);
 			bee[ctr].setFitness(fit.calculateFitness(bee[ctr].getPenaltyValue()));
-			}
+		}
 		bestBee.copyProblem(bee[0].getCopy());
 		bestBee.setFitness(bee[0].getFitness());
+
 		//array of empty cells
 		emptyCell=new int[numCell][3];
 		maxEmptyCell=0;
@@ -130,12 +140,13 @@ class ABC extends Thread{
 						if(subgrid[ctr2].isBelong(emptyCell[maxEmptyCell][1], emptyCell[maxEmptyCell][0])){
 							emptyCell[maxEmptyCell][2]=ctr2;
 							break;
-							}
 						}
-					maxEmptyCell++;
 					}
+					maxEmptyCell++;
 				}
 			}
+		}
+
 		for(int ctr=0; ctr<problem.length; ctr++)
 			subgrid[ctr].setNeededNum(bestBee.neededNumbers(subgrid[ctr]));
 	}
@@ -168,8 +179,8 @@ class ABC extends Thread{
 				copy[ct][ctr][0]=problem[ct][ctr][0];
 				copy[ctr][ct][1]=problem[ctr][ct][1];
 				copy[ct][ctr][1]=problem[ct][ctr][1];
-				}
 			}
+		}
 		return copy;
 	}
 
@@ -178,7 +189,7 @@ class ABC extends Thread{
 			maxFit=beeFitness;
 			bestBee.copyProblem(bee[i].getCopy());
 			bestBee.setFitness(beeFitness);
-			}
+		}
 		return maxFit;
 	}
 
