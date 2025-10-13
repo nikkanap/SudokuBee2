@@ -35,31 +35,36 @@ import java.util.Calendar;
 
 public class generalPanel{
 	private JLabel bg;
-	protected JPanel solve,special;
-	protected JPanel panel[]=new JPanel[8];
+	protected JPanel solve, special;
+	protected JPanel panel[] = new JPanel[8];
 	protected JButton play, create, options, exit, open, help;
+	
 	public generalPanel(){}
-	public generalPanel(Container container){
 
-		special=addPanel(container, 0,0,800,625);
-		solve=addPanel(container, 0,0,800,625);
-		for(int ctr=0; ctr<4; ctr++){
-			panel[ctr]=addPanel(container, 0,0,800,625);
-			}
-		panel[4]=addPanel(container, 0,0,513,81);
-		panel[5]=addPanel(container, 0,0,513,625);
-		for(int ctr=6; ctr<8; ctr++){
-			panel[ctr]=addPanel(container, 0,0,800,625);
-			}
-		play=addButton(panel[7], "img/main/play.png", "img/main/h_play.png",325,110);
-		open=addButton(panel[7], "img/main/open.png", "img/main/h_open.png",480,190);
-		create=addButton(panel[7], "img/main/create.png", "img/main/h_create.png",190,190);
-		options=addButton(panel[7], "img/main/options.png", "img/main/h_options.png",177,350);
-		help=addButton(panel[7], "img/main/help.png", "img/main/h_help.png", 475,345);
-		exit=addButton(panel[7], "img/main/exit.png", "img/main/h_exit.png", 330,425);
-		bg=addLabel(panel[7],"img/bg/main.png",0,0);
-		setVisible(7);
+	public generalPanel(Container container){
+		special = addPanel(container, 0,0,800,625);
+		solve = addPanel(container, 0,0,800,625);
+		for(int ctr = 0; ctr<4; ctr++){
+			panel[ctr] = addPanel(container, 0,0,800,625);
 		}
+
+		panel[4] = addPanel(container, 0,0,513,81);
+		panel[5] = addPanel(container, 0,0,513,625);
+		for(int ctr = 6; ctr<8; ctr++){
+			panel[ctr] = addPanel(container, 0,0,800,625);
+		}
+
+		play = addButton(panel[7], "img/main/play.png", "img/main/h_play.png",325,110);
+		open = addButton(panel[7], "img/main/open.png", "img/main/h_open.png",480,190);
+		create = addButton(panel[7], "img/main/create.png", "img/main/h_create.png",190,190);
+		options = addButton(panel[7], "img/main/options.png", "img/main/h_options.png",177,350);
+		help = addButton(panel[7], "img/main/help.png", "img/main/h_help.png", 475,345);
+		exit = addButton(panel[7], "img/main/exit.png", "img/main/h_exit.png", 330,425);
+		bg = addLabel(panel[7],"img/bg/main.png",0,0);
+		setVisible(7);
+	}
+
+	// sets the visibility of the main menu buttons
 	protected void setVisibleButton(boolean isVisible){
 		play.setVisible(isVisible);
 		open.setVisible(isVisible);
@@ -67,22 +72,27 @@ public class generalPanel{
 		options.setVisible(isVisible);
 		help.setVisible(isVisible);
 		exit.setVisible(isVisible);
-		}
+	}
+
 	protected void setVisible(int num){
-		solve.setVisible(num==-1);
-		special.setVisible(num==-2);
-		for(int ctr=0;ctr<8; ctr++)
+		solve.setVisible(num == -1);
+		special.setVisible(num == -2);
+
+		for(int ctr = 0; ctr< 8; ctr++)
 			panel[ctr].setVisible(false);
-		if(num==5){
+
+		if(num == 5){
 			panel[6].setVisible(true);
 			panel[4].setVisible(true);
-			}
-		if(num!=-1 && num!=-2)
-			panel[num].setVisible(true);
 		}
+
+		if(num != -1 && num != -2)
+			panel[num].setVisible(true);
+	}
+
 //JPanel
 	protected JPanel addPanel(Container container, int x, int y, int width, int height){
-		JPanel pane=new JPanel();
+		JPanel pane = new JPanel();
 		pane.setBounds(x, y, width, height);
 		pane.setLayout(null);
 		pane.setVisible(true);
@@ -90,29 +100,30 @@ public class generalPanel{
 		pane.setOpaque(false);
 		container.add(pane);
 		return pane;
-		}
+	}
+
 //JLabel
 	protected JLabel addLabel(Container pane, String pix, int x, int y){
-		Icon img=new ImageIcon(pix);
-		JLabel label= new JLabel();
+		Icon img = new ImageIcon(pix);
+		JLabel label = new JLabel();
 		label.setIcon(img);
 		pane.add(label);
 		label.setBounds(x, y, img.getIconWidth(), img.getIconHeight());
-		img=null;
+		img = null;
 		return label;
 	}
 
 	protected JLabel addLabel(Container pane, ImageIcon pix, int x, int y){
-		JLabel label= new JLabel();
+		JLabel label = new JLabel();
 		label.setIcon(pix);
 		pane.add(label);
 		label.setBounds(x, y, pix.getIconWidth(), pix.getIconHeight());
-		pix=null;
+		pix = null;
 		return label;
 	}
 
 	protected JLabel addLabel(Container pane, String string,int x, int y, int width, int height){
-		JLabel label= new JLabel(string);
+		JLabel label=new JLabel(string);
 		pane.add(label);
 		label.setBounds(x, y,width, height);
 		label.setFont(new Font("Arial", Font.PLAIN, 12));
@@ -121,7 +132,7 @@ public class generalPanel{
 	}
 
 	protected JLabel addLabel(Container pane, String string,Color color,int x, int y, int width, int height, int alignment){
-		JLabel label= new JLabel(string, alignment);
+		JLabel label = new JLabel(string, alignment);
 		pane.add(label);
 		label.setBounds(x, y,width, height);
 		label.setFont(new Font("Arial", Font.BOLD, 14));
@@ -130,7 +141,7 @@ public class generalPanel{
 	}
 
 	protected JLabel addLabel(Container pane, String string,int x, int y, int width, int height, int alignment){
-		JLabel label= new JLabel(string, alignment);
+		JLabel label = new JLabel(string, alignment);
 		pane.add(label);
 		label.setBounds(x, y,width, height);
 		label.setFont(new Font("Arial", Font.PLAIN, 12));
@@ -139,8 +150,8 @@ public class generalPanel{
 	}
 
 	protected JLabel addInvisibleLabel(Container pane, String string, int x, int y){
-		Icon img=new ImageIcon(string);
-		JLabel label= new JLabel();
+		Icon img = new ImageIcon(string);
+		JLabel label = new JLabel();
 		label.setVisible(false);
 		label.setIcon(img);
 		pane.add(label);
@@ -148,20 +159,21 @@ public class generalPanel{
 		label.setVisible(false);
 		return label;
 	}
+
 //JButton
 	protected JButton addButton(Container pane, String string, int x, int y, int width, int height){
-		JButton button=new JButton(string);
+		JButton button = new JButton(string);
 		pane.add(button);
-		button.setBounds(x,y,width,height);
+		button.setBounds(x, y, width, height);
 		button.setCursor(new Cursor(12));
 		return button;
 	}
 
 	protected JButton addButton(Container pane, String string, String hover,int x, int y){
-		JButton button=new JButton();
-		Icon img=new ImageIcon(string);
+		JButton button = new JButton();
+		Icon img = new ImageIcon(string);
 		button.setIcon(img);
-		img=new ImageIcon(hover);
+		img = new ImageIcon(hover);
 		button.setRolloverIcon(img);
 		button.setPressedIcon(img);
 		pane.add(button);
@@ -171,8 +183,8 @@ public class generalPanel{
 	}
 
 	protected JButton gameButton(Container pane, String string,int x, int y){
-		Icon img=new ImageIcon(string);
-		JButton button=new JButton(img);
+		Icon img = new ImageIcon(string);
+		JButton button = new JButton(img);
 		pane.add(button);
 		button.setBounds(x,y,img.getIconWidth(),img.getIconHeight());
 		button.setContentAreaFilled(false);
@@ -184,8 +196,8 @@ public class generalPanel{
 	}
 
 	protected JButton addButton(Container pane, String string, int x, int y){
-		JButton button=new JButton();
-		Icon img=new ImageIcon(string);
+		JButton button = new JButton();
+		Icon img = new ImageIcon(string);
 		button.setIcon(img);
 		pane.add(button);
 		setButton(button);
@@ -203,7 +215,7 @@ public class generalPanel{
 
 //JRadioButton
 	protected JRadioButton addRadioButton(Container pane, String string, int x, int y, int width, int height, int font){
-		JRadioButton button=new JRadioButton(string);
+		JRadioButton button = new JRadioButton(string);
 		pane.add(button);
 		button.setBounds(x,y,width,height);
 		button.setBorder(BorderFactory.createLoweredBevelBorder());
@@ -214,7 +226,7 @@ public class generalPanel{
 
 //JTextField
 	protected JTextField addTextField(Container pane, String string, int x, int y, int width, int height){
-		JTextField area= new JTextField(string);
+		JTextField area = new JTextField(string);
 		area.setBounds(x, y, width, height);
 		area.setOpaque(false);
 		area.setBorder(null);
@@ -227,7 +239,7 @@ public class generalPanel{
 
 //JPasswordField
 	protected JPasswordField addPasswordField(JPanel pane, int x, int y, int width, int height){
-		JPasswordField area= new JPasswordField("",10);
+		JPasswordField area=new JPasswordField("",10);
 		area.setBounds(x, y, width, height);
 		pane.add(area);
 		area.setFont(new Font("Arial", Font.PLAIN, 12));
@@ -237,10 +249,10 @@ public class generalPanel{
 //JTable
 	protected JTable addTable(Container pane, Object[] column, Object[][] data, int[] columnWidth){
 		DefaultTableModel listModel = new DefaultTableModel(data, column);
-	    JTable table= new JTable(listModel){
+	    JTable table = new JTable(listModel){
 	      	public boolean isCellEditable(int rowIndex, int colIndex) {
 				return false;
-	      		}
+			}
 		};
 		table.setBorder(null);
 		table.setSelectionMode(0);
@@ -252,8 +264,8 @@ public class generalPanel{
 		table.setColumnSelectionAllowed(false);
 		table.setFont(new Font("Arial", Font.PLAIN, 11));
 		table.setDragEnabled(false);
-		for(int ctr=0; ctr<columnWidth.length; ctr++){
-			TableColumn columnNum =table.getColumnModel().getColumn(ctr);
+		for(int ctr = 0; ctr<columnWidth.length; ctr++){
+			TableColumn columnNum = table.getColumnModel().getColumn(ctr);
 			columnNum.setPreferredWidth(columnWidth[ctr]);
 			columnNum.setMinWidth(columnWidth[ctr]);
 			columnNum.setMaxWidth(columnWidth[ctr]);
@@ -276,8 +288,8 @@ public class generalPanel{
 	}
 
 	protected void columnWidth(JTable table, int[] columnWidth, int max){
-		for(int ctr=0; ctr<max; ctr++){
-			TableColumn columnNum =table.getColumnModel().getColumn(ctr);
+		for(int ctr = 0; ctr<max; ctr++){
+			TableColumn columnNum = table.getColumnModel().getColumn(ctr);
 			columnNum.setPreferredWidth(columnWidth[ctr]);
 			columnNum.setMinWidth(columnWidth[ctr]);
 			columnNum.setMaxWidth(columnWidth[ctr]);
@@ -286,12 +298,12 @@ public class generalPanel{
 
 //JScrollPane
 	protected JScrollPane addScrollPane(Container pane, JComponent component, int x, int y, int width, int height){
-		JScrollPane TScroll=new JScrollPane(component);
+		JScrollPane TScroll = new JScrollPane(component);
 		TScroll.setViewportView(component);
 		TScroll.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED);
 		TScroll.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
 		TScroll.setBounds(x-1,y-1, width+3, height+16);
-		javax.swing.JViewport view=TScroll.getViewport();
+		javax.swing.JViewport view = TScroll.getViewport();
 		view.setOpaque(false);
 		TScroll.setOpaque(false);
 		view.setBorder(null);
@@ -302,7 +314,7 @@ public class generalPanel{
 
 //JCheckBox
 	protected JCheckBox addCheckBox(Container pane, String string, int x, int y, int width, int height){
-		JCheckBox box=new JCheckBox(string);
+		JCheckBox box = new JCheckBox(string);
 		pane.add(box);
 		box.setFont(new Font("Arial", Font.PLAIN, 12));
 		box.setBounds(x,y,width,height);
@@ -314,7 +326,7 @@ public class generalPanel{
 //JComboBox
 	protected JComboBox addJCombo(Container pane, String string[], int x, int y, int width, int height){
 		JComboBox comboBox = new JComboBox();
-		for(int ctr=0; ctr<string.length; ctr++)
+		for(int ctr = 0; ctr<string.length; ctr++)
 			comboBox.addItem(string[ctr]);
 		comboBox.setBounds(x, y, width, height);
 		pane.add(comboBox);
@@ -324,7 +336,7 @@ public class generalPanel{
 	protected JComboBox addJCombo(Container pane, String title,Object string[], int x, int y, int width, int height, int length){
 		JComboBox comboBox = new JComboBox();
 		comboBox.addItem(title);
-		for(int ctr=0; ctr<length; ctr++)
+		for(int ctr = 0; ctr<length; ctr++)
 			comboBox.addItem(string[ctr]);
 		comboBox.setBounds(x, y, width, height);
 		pane.add(comboBox);
@@ -334,7 +346,7 @@ public class generalPanel{
 	protected JComboBox addJCombo(Container pane, String title, Object string[], int x, int y, int width, int height){
 		JComboBox comboBox = new JComboBox();
 		comboBox.addItem(title);
-		for(int ctr=0; ctr<string.length; ctr++)
+		for(int ctr = 0; ctr<string.length; ctr++)
 			comboBox.addItem(string[ctr]+"");
 		comboBox.setBounds(x, y, width, height);
 		pane.add(comboBox);
@@ -342,35 +354,35 @@ public class generalPanel{
 	}
 
 	protected int question(Container container, String first, String second){
-		Icon icon=new ImageIcon("img/question.png");
-		JOptionPane optionPane=new JOptionPane();
-		int selectedValue=optionPane.showConfirmDialog(container, first, second, JOptionPane.YES_NO_OPTION,JOptionPane.QUESTION_MESSAGE,icon);
-		icon=null;
+		Icon icon = new ImageIcon("img/question.png");
+		JOptionPane optionPane = new JOptionPane();
+		int selectedValue = optionPane.showConfirmDialog(container, first, second, JOptionPane.YES_NO_OPTION,JOptionPane.QUESTION_MESSAGE,icon);
+		icon = null;
 		return selectedValue;
 	}
 
 	protected void error(Container container, String first, String second){
-		Icon icon=new ImageIcon("img/stop.png");
+		Icon icon = new ImageIcon("img/stop.png");
 		JOptionPane.showMessageDialog(container,first, second, JOptionPane.ERROR_MESSAGE,icon);
-		icon=null;
+		icon = null;
 	}
 
 	protected int saveChanges(Container container){
-		Icon icon=new ImageIcon("img/save.png");
-		JOptionPane optionPane=new JOptionPane();
-		int selectedValue=optionPane.showConfirmDialog(container,"Save changes?", "Save", JOptionPane.YES_NO_OPTION,JOptionPane.QUESTION_MESSAGE,icon);
-		icon=null;
+		Icon icon = new ImageIcon("img/save.png");
+		JOptionPane optionPane = new JOptionPane();
+		int selectedValue = optionPane.showConfirmDialog(container,"Save changes?", "Save", JOptionPane.YES_NO_OPTION,JOptionPane.QUESTION_MESSAGE,icon);
+		icon = null;
 		return selectedValue;
 	}
 
 	protected void information(Container container, String first, String second){
-		Icon icon=new ImageIcon("img/info.png");
+		Icon icon = new ImageIcon("img/info.png");
 		JOptionPane.showMessageDialog(container,first, second, JOptionPane.ERROR_MESSAGE,icon);
-		icon=null;
+		icon = null;
 	}
 
 	protected JDialog addDialog(JFrame frame, JOptionPane pane, String string, int x, int y){
-		JDialog dialog=new JDialog(frame, string, true);
+		JDialog dialog = new JDialog(frame, string, true);
 		dialog.setContentPane(pane);
 		dialog.setSize(x,y-10);
 		dialog.setLocationRelativeTo(frame);
@@ -379,14 +391,14 @@ public class generalPanel{
 	}
 
 	protected JOptionPane addOPane(){
-		JOptionPane pane=new JOptionPane();
+		JOptionPane pane = new JOptionPane();
 		pane.setBackground(new Color(220,220,220));
 		pane.setLayout(null);
 		return pane;
 	}
 
 	protected FileDialog addFileDialog(JFrame frame, String string, String ft){
-		FileDialog FD=new FileDialog(frame, string);
+		FileDialog FD = new FileDialog(frame, string);
 		FD.setFile(ft);
 		return FD;
 	}
@@ -402,23 +414,23 @@ public class generalPanel{
 	}
 
 	protected JList addList(Container pane, Object obj[]){
-		JList list=new JList();
-		if(obj!=null)
+		JList list = new JList();
+		if(obj != null)
 			list.setListData(obj);
 		pane.add(list);
 		return list;
 	}
 
 	protected boolean checkCaptiaSize(String file){
-		Icon icon=new ImageIcon(file);
-		if(icon.getIconWidth()!=200 || icon.getIconHeight()!=75)
+		Icon icon = new ImageIcon(file);
+		if(icon.getIconWidth() != 200 || icon.getIconHeight() != 75)
 			return false;
-		icon=null;
+		icon = null;
 		return true;
 	}
 
 	protected JTabbedPane addTab(Container pane, int x, int y, int width, int height){
-		JTabbedPane tab=new JTabbedPane(JTabbedPane.TOP, 0);
+		JTabbedPane tab = new JTabbedPane(JTabbedPane.TOP, 0);
 		pane.add(tab);
 		tab.setBounds(x,y,width,height);
 		tab.setFont(new Font("Arial", Font.BOLD, 13));
@@ -427,7 +439,7 @@ public class generalPanel{
 	}
 
 	protected JList addList(Container pane, Object str[], int x, int y, int width, int height){
-		JList list=new JList(str);
+		JList list = new JList(str);
 		pane.add(list);
 		list.setBounds(x,y,width,height);
 		list.setFont(new Font("Arial", Font.BOLD, 25));
@@ -436,7 +448,7 @@ public class generalPanel{
 		list.setSelectionBackground(Color.orange);
 		list.setCellRenderer(new ListCellRenderer (){
 			public java.awt.Component getListCellRendererComponent(JList list,Object obj, int index, boolean isSelected, boolean hasFocus){
-				JLabel area=new JLabel();
+				JLabel area = new JLabel();
 				area.setFont(new Font("Arial", Font.BOLD, 25));
 				area.setText((String)obj);
 				area.setBorder(null);
@@ -460,7 +472,7 @@ public class generalPanel{
 	}
 
 	protected JPanel addSpecialPanel(JTabbedPane container, String title){
-		JPanel pane=new JPanel();
+		JPanel pane = new JPanel();
 		pane.setLayout(null);
 		pane.setBackground(new Color(233,136,89));
 		pane.setOpaque(true);
@@ -469,17 +481,17 @@ public class generalPanel{
 	}
 
 	protected void changePicture(JButton label, String photo){
-		Icon img=new ImageIcon(photo);
+		Icon img = new ImageIcon(photo);
 		label.setIcon(img);
-		img=new ImageIcon(photo);
+		img = new ImageIcon(photo);
 		label.setRolloverIcon(img);
-		img=null;
+		img = null;
 	}
 
 	protected void changePicture(JLabel label, String photo){
-		Icon img=new ImageIcon(photo);
+		Icon img = new ImageIcon(photo);
 		label.setIcon(img);
-		img=null;
+		img = null;
 	}
 
 	protected void sop(Object obj){

@@ -42,8 +42,10 @@ public class SudokuBee extends Thread{
 		// opens up the menu
 		menu();
 
-		// 
+		// opens up the options
 		options();
+
+		// JFrame setup
 		frame.setVisible(true);
 		frame.setSize(800,625);
 		frame.setLocationRelativeTo(null);
@@ -54,6 +56,7 @@ public class SudokuBee extends Thread{
 	private void menu(){
 		GP = new generalPanel(container);
 
+		// action listener for the play button
 		GP.play.addActionListener(new ActionListener(){
 			public void actionPerformed(ActionEvent e){
 				mainGame();
@@ -77,6 +80,7 @@ public class SudokuBee extends Thread{
 			}
 		});
 
+		// action listener for the load button
 		GP.open.addActionListener(new ActionListener(){
 			public void actionPerformed(ActionEvent e){
 				GP.setVisibleButton(false);
@@ -87,6 +91,7 @@ public class SudokuBee extends Thread{
 			}
 		});
 
+		// action listener for the create button
 		GP.create.addActionListener(new ActionListener(){
 			public void actionPerformed(ActionEvent e){
 				mainGame();
@@ -100,6 +105,7 @@ public class SudokuBee extends Thread{
 			}
 		});
 
+		// action listener for the options button
 		GP.options.addActionListener(new ActionListener(){
 			public void actionPerformed(ActionEvent e){
 				GP.setVisibleButton(false);
@@ -107,12 +113,14 @@ public class SudokuBee extends Thread{
 			}
 		});
 
+		// action listener for the help button
 		GP.help.addActionListener(new ActionListener(){
 			public void actionPerformed(ActionEvent e){
 				help(7);
 			}
 		});
 
+		// action listener for the exit button
 		GP.exit.addActionListener(new ActionListener(){
 			public void actionPerformed(ActionEvent e){
 				GP.setVisibleButton(false);
@@ -121,15 +129,19 @@ public class SudokuBee extends Thread{
 		});
 	}
 
+	// for loading a saved sudoku game
 	private void loadSudoku(int num){
+		// 
 		GP.setVisible(num);
-		load=new UILoad(GP.solve);
+		load = new UILoad(GP.solve); // don't question this. I did and it still doesn't make sense - Nikka
 		load.lists.grabFocus();
-		final int number=num;
+		final int number = num;
+
 		try{
 			status.setVisible(false);
 		} catch(Exception e){}
 
+		// action listener to cancel button 
 		load.cancel.addActionListener(new ActionListener(){
 			public void actionPerformed(ActionEvent e){
 				try{
@@ -144,6 +156,7 @@ public class SudokuBee extends Thread{
 			}
 		});
 
+		// action listener to load button
 		load.load.addActionListener(new ActionListener(){
 			public void actionPerformed(ActionEvent e){
 				open(load.lists.getSelectedValue()+"");
@@ -407,7 +420,7 @@ public class SudokuBee extends Thread{
 				solve.changeMode();
 			}
 		});
-		
+
 		solve.solve.addActionListener(new ActionListener(){
 			public void actionPerformed(ActionEvent e){
 				status.setVisible(false);
@@ -809,6 +822,7 @@ public class SudokuBee extends Thread{
 
 	private void options(){
 		options = new UIOptions(GP.panel);
+
 		options.exit.addActionListener(new ActionListener(){
 			public void actionPerformed(ActionEvent e){
 				try{
@@ -862,6 +876,6 @@ public class SudokuBee extends Thread{
 	}
 
 	public static void main(String args[]){
-		SudokuBee app = new SudokuBee();
+		new SudokuBee();
 	}
 }

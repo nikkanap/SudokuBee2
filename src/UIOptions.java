@@ -17,33 +17,34 @@ public class UIOptions extends generalPanel{
 	protected int sz, lvl, snd, num;
 
 	UIOptions(JPanel panel[]){
-		this.panel=panel;
+		this.panel = panel;
 		panel[1].setOpaque(true);
-		exit=addButton(panel[1], "img/exit/okay.png", "img/exit/h_okay.png",385,401);
+		exit = addButton(panel[1], "img/exit/okay.png", "img/exit/h_okay.png",385,401);
 
-		for(int ctr=0; ctr<2; ctr++){
-			left[ctr]=addButton(panel[1], "img/exit/left.png", "img/exit/h_left.png",356,235+70*ctr);
-			right[ctr]=addButton(panel[1], "img/exit/right.png", "img/exit/h_right.png",568,235+70*ctr);
+		for(int ctr  =  0; ctr<2; ctr++){
+			left[ctr] = addButton(panel[1], "img/exit/left.png", "img/exit/h_left.png",356,235+70*ctr);
+			right[ctr] = addButton(panel[1], "img/exit/right.png", "img/exit/h_right.png",568,235+70*ctr);
 			}
-		sizeLabel=addLabel(panel[1], size[1], 389,237);
-		soundLabel=addLabel(panel[1], sound[0], 389,308);
-		bg=addLabel(panel[1],"img/bg/options.png",100,99);
 
-		sz=1;
-		num=lvl=snd=0;
+		sizeLabel = addLabel(panel[1], size[1], 389,237);
+		soundLabel = addLabel(panel[1], sound[0], 389,308);
+		bg = addLabel(panel[1],"img/bg/options.png",100,99);
+
+		sz = 1;
+		num = lvl = snd = 0;
 		//panel[1].setVisible(true);
 	}
 
 	protected void setSize(boolean isRight){
 		if (isRight){
 			sz++;
-			if(sz==3)
-				sz=0;
+			if(sz == 3)
+				sz = 0;
 		}
 		else {
 			sz--;
-			if(sz==-1)
-				sz=2;
+			if(sz == -1)
+				sz = 2;
 		}
 		changePicture(sizeLabel, size[sz]);
 	}
@@ -51,26 +52,26 @@ public class UIOptions extends generalPanel{
 	protected void setSound(boolean isRight){
 		if (isRight){
 			snd++;
-			if(snd==2)
-				snd=0;
+			if(snd == 2)
+				snd = 0;
 		}
 		else {
 			snd--;
-			if(snd==-1)
-				snd=1;
+			if(snd == -1)
+				snd = 1;
 		}
 		changePicture(soundLabel, sound[snd]);
 	}
 
 	protected void setVisible(boolean isVisible, int num){
-		this.num=num;
+		this.num = num;
 		panel[1].setVisible(isVisible);
 	}
 
 	protected void decompose(){
 		panel[1].removeAll();
-		bg=sizeLabel=levelLabel=soundLabel=null;
-		exit=no=null;
-		left[0]=right[0]=left[1]=right[1]=null;
+		bg = sizeLabel = levelLabel = soundLabel = null;
+		exit = no = null;
+		left[0] = right[0] = left[1] = right[1] = null;
 	}
 }
