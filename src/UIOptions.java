@@ -1,6 +1,7 @@
 import javax.swing.JPanel;
 import javax.swing.JLabel;
 import javax.swing.JButton;
+
 public class UIOptions extends generalPanel{
 	private JPanel panel[];
 	private JLabel bg;
@@ -14,6 +15,7 @@ public class UIOptions extends generalPanel{
 	protected JButton right[]=new JButton[2];
 
 	protected int sz, lvl, snd, num;
+
 	UIOptions(JPanel panel[]){
 		this.panel=panel;
 		panel[1].setOpaque(true);
@@ -30,41 +32,45 @@ public class UIOptions extends generalPanel{
 		sz=1;
 		num=lvl=snd=0;
 		//panel[1].setVisible(true);
-		}
+	}
+
 	protected void setSize(boolean isRight){
-		if(isRight){
+		if (isRight){
 			sz++;
 			if(sz==3)
 				sz=0;
-			}
-		else{
+		}
+		else {
 			sz--;
 			if(sz==-1)
 				sz=2;
-			}
-		changePicture(sizeLabel, size[sz]);
 		}
+		changePicture(sizeLabel, size[sz]);
+	}
+
 	protected void setSound(boolean isRight){
-		if(isRight){
+		if (isRight){
 			snd++;
 			if(snd==2)
 				snd=0;
-			}
-		else{
+		}
+		else {
 			snd--;
 			if(snd==-1)
 				snd=1;
-			}
-		changePicture(soundLabel, sound[snd]);
 		}
+		changePicture(soundLabel, sound[snd]);
+	}
+
 	protected void setVisible(boolean isVisible, int num){
 		this.num=num;
 		panel[1].setVisible(isVisible);
-		}
+	}
+
 	protected void decompose(){
 		panel[1].removeAll();
 		bg=sizeLabel=levelLabel=soundLabel=null;
 		exit=no=null;
 		left[0]=right[0]=left[1]=right[1]=null;
-		}
 	}
+}

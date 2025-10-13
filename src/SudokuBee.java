@@ -42,6 +42,7 @@ public class SudokuBee extends Thread{
 		// opens up the menu
 		menu();
 
+		// 
 		options();
 		frame.setVisible(true);
 		frame.setSize(800,625);
@@ -320,9 +321,10 @@ public class SudokuBee extends Thread{
 				pop.setVisible(false,0,0,0);
 				status.setVisible(true);
 				game.setVisible(isAns);
-				}
-			});
-		}
+			}
+		});
+	}
+
 	private void mainGame(){
 		GP.setVisible(6);
 		game = new UIGame(GP.panel[6]);
@@ -360,30 +362,33 @@ public class SudokuBee extends Thread{
 		game.help.addActionListener(new ActionListener(){
 			public void actionPerformed(ActionEvent e){
 				help(5);
-				}
-			});
-		}
+			}
+		});
+	}
+
 	private void help(int num){
 		GP.setVisible(0);
 		help = new UIHelp(GP.panel[0], num);
 		help.next.addActionListener(new ActionListener(){
 			public void actionPerformed(ActionEvent e){
 				help.increase();
-				}
-			});
+			}
+		});
+
 		help.back.addActionListener(new ActionListener(){
 			public void actionPerformed(ActionEvent e){
 				help.decrease();
-				}
-			});
+			}
+		});
+
 		help.cancel.addActionListener(new ActionListener(){
 			public void actionPerformed(ActionEvent e){
 				help.decompose();
 				GP.setVisible(help.panelNum);
 				help = null;
-				}
-			});
-		}
+			}
+		});
+	}
 
 	private void solve(){
 		solve = new UISolve(GP.solve);
@@ -394,13 +399,15 @@ public class SudokuBee extends Thread{
 				solve.decompose();
 				solve = null;
 				GP.setVisible(5);
-				}
-			});
+			}
+		});
+
 		solve.mode.addActionListener(new ActionListener(){
 			public void actionPerformed(ActionEvent e){
 				solve.changeMode();
-				}
-			});
+			}
+		});
+		
 		solve.solve.addActionListener(new ActionListener(){
 			public void actionPerformed(ActionEvent e){
 				status.setVisible(false);
@@ -680,6 +687,7 @@ public class SudokuBee extends Thread{
 						game.setVisible(true);
 						status.setVisible(true);
 					} catch(Exception ee){}
+
 					exit.decompose();
 					if(exit.num == 0)
 						System.exit(0);
@@ -703,6 +711,7 @@ public class SudokuBee extends Thread{
 						status = null;
 						pop.decompose();
 						pop = null;
+						
 						mainGame();
 						status("");
 						isAns = true;
@@ -713,10 +722,10 @@ public class SudokuBee extends Thread{
 						numCycle = 100000000;
 						generate = true;
 						gameMode = true;
+
 						try{
 							start();
-						}
-						catch(Exception ee){
+						} catch(Exception ee){
 							start = true;
 						}
 						popUp(size);
@@ -747,6 +756,7 @@ public class SudokuBee extends Thread{
 						game.setVisible(true);
 						status.setVisible(true);
 					} catch(Exception ee){}
+
 					exit.decompose();
 					if(exit.num == 0)
 						GP.setVisible(7);
@@ -765,6 +775,7 @@ public class SudokuBee extends Thread{
 					GP.setVisibleButton(true);
 					game.setVisible(true);
 					status.setVisible(true);
+
 					if(exit.num == 7)
 						solve();
 					else if(exit.num == 5){
@@ -788,6 +799,7 @@ public class SudokuBee extends Thread{
 					else {
 						GP.setVisible(5);
 					}	
+
 					exit.decompose();
 					exit = null;
 				}
@@ -804,6 +816,7 @@ public class SudokuBee extends Thread{
 					status.setVisible(true);
 				} catch(Exception ee){}
 				GP.setVisibleButton(true);
+
 				if(options.num == 0)
 					GP.setVisible(7);
 				else
