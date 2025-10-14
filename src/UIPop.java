@@ -29,7 +29,6 @@ public class UIPop extends generalPanel{
 
 		bg = addLabel(panel, "img/game control/"+size+"x"+size+".png",0,0);
 		field.grabFocus();
-		
 	}
 
 	private void sixButtons(){
