@@ -16,6 +16,7 @@ public class UIGame extends generalPanel{
 	private void gameButtons(){
 		for(int ctr=0; ctr<3; ctr++)
 			panel[ctr]=addPanel(pane,0,0,800,625);
+			
 		newGame=addButton(panel[0], "img/game/new.png", "img/game/h_new.png",565,230);
 		solve=addButton(panel[0], "img/game/solve.png", "img/game/h_solve.png",610,280);
 		options=addButton(panel[0], "img/game/options.png", "img/game/h_options.png",600,330);
