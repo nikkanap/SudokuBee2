@@ -11,10 +11,10 @@ public class LoadSudoku{
 	private boolean valid = false;
 
 	LoadSudoku(String path){
-		try{
+		try {
 			file =  new FileReader(path);
 			buff =  new BufferedReader(file);
-			try{
+			try {
 				size = Integer.parseInt(buff.readLine());
 				sudokuArray = new int[size][size][2];
 				original = new int[size][size][2];
@@ -35,7 +35,7 @@ public class LoadSudoku{
 						str = str.substring(str.indexOf(" ")+1,str.length());
 					}
 
-					if(!isEven)
+					if (!isEven)
 						ctr++;
 				}
 
@@ -43,7 +43,7 @@ public class LoadSudoku{
 				buff.close();
 				for(int ctr = 0; ctr<size; ctr++){
 					for(int count = 0; count<size; count++){
-						if(sudokuArray[ctr][count][1] == 1){
+						if (sudokuArray[ctr][count][1] == 1){
 							original[ctr][count][0] = 0;
 							original[ctr][count][1] = 1;
 						}
@@ -63,17 +63,17 @@ public class LoadSudoku{
 			valid = false;
 		}
 		
-		if(valid){
+		if (valid){
 			Subgrid subgrid[] = new Subgrid[original.length];
 			int subDimY = (int)Math.sqrt(original.length);
 			int subDimX = original.length/subDimY;
 			for(int ctr = 0, xCount = 0; ctr<original.length; ctr++, xCount++){
 				subgrid[ctr] = new Subgrid(xCount*subDimX, ((ctr/subDimY)*subDimY), subDimX, subDimY);
-				if((ctr+1)%subDimY == 0 && ctr>0)
+				if ((ctr+1)%subDimY == 0 && ctr>0)
 					xCount = -1;
 			}
 			Validator val = new Validator(original, subgrid);
-			if(!val.checkValidity()){
+			if (!val.checkValidity()){
 				valid = false;
 			}
 			val = null;
