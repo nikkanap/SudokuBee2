@@ -10,7 +10,9 @@ import java.awt.event.MouseListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.Container;
+import java.awt.Desktop;
 import java.io.FileReader;
+import java.io.IOException;
 import java.io.BufferedReader;
 import java.io.File;
 
@@ -669,11 +671,20 @@ public class SudokuBee extends Thread{
 				printer = null;
 
 				game.setVisible(0);
-				Runtime rt = Runtime.getRuntime();
+				
+				try {
+					Desktop.getDesktop().open(new File(file));
+				} catch (IOException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
 
-				try{
-					rt.exec("rundll32 SHELL32.DLL,ShellExec_RunDLL " + file);
-				} catch(Exception ee){}
+				// EDITING HERE RN
+				//Runtime rt = Runtime.getRuntime();
+
+				//try{
+				//	rt.exec("rundll32 SHELL32.DLL,ShellExec_RunDLL " + file, null, null);
+				//} catch(Exception ee){}
 				
 				board.decompose();
 				board = null;
@@ -691,7 +702,7 @@ public class SudokuBee extends Thread{
 
 				abc.decompose();
 				abc = null;
-				rt = null;
+				//rt = null;
 				status.setVisible(true);
 			}
 
