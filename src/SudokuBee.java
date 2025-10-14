@@ -1,5 +1,4 @@
 import javax.swing.JFrame;
-import javax.swing.SwingUtilities;
 
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
@@ -37,7 +36,7 @@ public class SudokuBee extends Thread{
 	private Container container = frame.getContentPane();
 	private String saveFileName = "";
 
-	SudokuBee(){
+	public SudokuBee(){
 		frame.setTitle(" Sudoku Bee");
 		snd = new Tunog("snd/1.mid");
 		error = new Tunog("snd/error.wav");
@@ -251,7 +250,7 @@ public class SudokuBee extends Thread{
 					board.btn[btnX][btnY].addMouseListener(new MouseAdapter(){
 						public void mouseClicked(MouseEvent e){
 							// NOTE!!! modify to something not deprecated
-							if(!isSolved && e.getModifiers() == 4){
+							if(!isSolved && e.getButton() == MouseEvent.BUTTON3){
 								// make the popup visible
 								pop.setVisible(true, x, y, board.getValue(x, y));
 								

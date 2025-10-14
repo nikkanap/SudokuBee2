@@ -11,11 +11,11 @@ class Subgrid{
 	private Random rand;
 	
 	Subgrid(int startX, int startY, int dimX, int dimY){
-		this.dimX=dimX;
-		this.dimY=dimY;
-		this.startX=startX;
-		this.startY=startY;
-		rand=new Random();
+		this.dimX = dimX;
+		this.dimY = dimY;
+		this.startX = startX;
+		this.startY = startY;
+		rand = new Random();
 	}
 
 	protected int getDimX(){
@@ -35,21 +35,21 @@ class Subgrid{
 	}
 
 	protected void setNeededNum(int[] neededNum){
-		this.neededNum=neededNum;
+		this.neededNum = neededNum;
 	}
 
 	protected int[] getNeededNum(){
-		for(int ctr=0, ptr=neededNum.length-1; ctr<neededNum.length; ctr++, ptr--){
-			int index=rand.nextInt(ptr+1);
-			int tmp=neededNum[index];
-			neededNum[index]=neededNum[ptr];
-			neededNum[ptr]=tmp;
+		for(int ctr = 0, ptr = neededNum.length-1; ctr<neededNum.length; ctr++, ptr--){
+			int index = rand.nextInt(ptr+1);
+			int tmp = neededNum[index];
+			neededNum[index] = neededNum[ptr];
+			neededNum[ptr] = tmp;
 		}
 		return neededNum;
 	}
 
 	protected boolean isBelong(int x, int y){
-		if(x>=startX && x<startX+dimX && y>=startY && y<startY+dimY)
+		if(x >= startX && x < startX+dimX && y >= startY && y < startY+dimY)
 			return true;
 		return false;
 	}
