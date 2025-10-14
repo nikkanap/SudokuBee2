@@ -60,24 +60,30 @@ public class SudokuBee extends Thread{
 		// action listener for the play button
 		GP.play.addActionListener(new ActionListener(){
 			public void actionPerformed(ActionEvent e){
-				mainGame();
+				// opens up the sudoku game background
+				mainGame(); 
 				status("");
-				isAns=true;
-				int size=(options.sz+2)*3;
+				isAns = true;
+				int size = (options.sz+2)*3;
+
+				// generates the sudoku board
 				board(new int[size][size][2], true);
-				numEmp=100;
-				numOnlook=200;
-				numCycle=100000000;
-				generate=true;
-				gameMode=true;
-				isSolved=false;
+
+				numEmp = 100;
+				numOnlook = 200;
+				numCycle = 100000000;
+				generate = true;
+				gameMode = true;
+				isSolved = false;
 				
+				// starting the animation sequence
 				try{
 					start();
 				} catch(Exception ee){
-					start=true;
+					start = true;
 				}
 
+				// generates the popup for the numbers selection
 				popUp(size);
 			}
 		});
@@ -85,11 +91,16 @@ public class SudokuBee extends Thread{
 		// action listener for the load button
 		GP.open.addActionListener(new ActionListener(){
 			public void actionPerformed(ActionEvent e){
+				// hides the main menu buttons
 				GP.setVisibleButton(false);
 
-				int size=(options.sz + 2) * 3;
-				isSolved=false;
+				int size = (options.sz + 2) * 3;
+				isSolved = false;
+
+				// generates a sudoku boartd
 				board(new int[size][size][2], true);
+
+				// loads a sudoku game from the saves directory
 				loadSudoku(7);
 			}
 		});
@@ -97,11 +108,14 @@ public class SudokuBee extends Thread{
 		// action listener for the create button
 		GP.create.addActionListener(new ActionListener(){
 			public void actionPerformed(ActionEvent e){
+				// opens up the sudoku game background
 				mainGame();
-				isAns=false;
-				int size=(options.sz+2)*3;
-				isSolved=false;
+
+				isAns = false;
+				int size = (options.sz+2)*3;
+				isSolved = false;
 				
+				// generates a sudoku board
 				board(new int[size][size][2], true);
 				game.setVisible(false);
 				status("create");
@@ -113,7 +127,10 @@ public class SudokuBee extends Thread{
 		// action listener for the options button
 		GP.options.addActionListener(new ActionListener(){
 			public void actionPerformed(ActionEvent e){
+				// hides the main menu buttons
 				GP.setVisibleButton(false);
+
+				// makes the options UI visible
 				options.setVisible(true, 0);
 			}
 		});
@@ -121,6 +138,7 @@ public class SudokuBee extends Thread{
 		// action listener for the help button
 		GP.help.addActionListener(new ActionListener(){
 			public void actionPerformed(ActionEvent e){
+				// just opens up the help UI
 				help(7);
 			}
 		});
@@ -128,7 +146,10 @@ public class SudokuBee extends Thread{
 		// action listener for the exit button
 		GP.exit.addActionListener(new ActionListener(){
 			public void actionPerformed(ActionEvent e){
+				// hides the main menu buttons
 				GP.setVisibleButton(false);
+
+				// opens up the exit UI
 				exit(0);
 			}
 		});
@@ -153,13 +174,18 @@ public class SudokuBee extends Thread{
 		load.cancel.addActionListener(new ActionListener(){
 			public void actionPerformed(ActionEvent e){
 				try{
+					// make both the game and status UI visible
 					game.setVisible(true);
 					status.setVisible(true);
 				}
 				catch(Exception ee){}
+				// hides the main menu buttons
 				GP.setVisibleButton(true);
+
 				load.decompose();
 				load = null;
+
+				// makes a specific or set of panels visible
 				GP.setVisible(number);
 			}
 		});
@@ -214,10 +240,15 @@ public class SudokuBee extends Thread{
 					final int x = btnX;
 					final int y = btnY;
 
+					// action listener when user right clicks their mouse on a grid
 					board.btn[btnX][btnY].addMouseListener(new MouseAdapter(){
 						public void mouseClicked(MouseEvent e){
+							// NOTE!!! modify to something not deprecated
 							if(!isSolved && e.getModifiers() == 4){
+								// make the popup visible
 								pop.setVisible(true, x, y, board.getValue(x, y));
+								
+								// make the status and the game invisible
 								status.setVisible(false);
 								game.setVisible(false);
 							}
@@ -235,24 +266,29 @@ public class SudokuBee extends Thread{
 			pop = null;
 		} catch(Exception e){}
 
+		// generates a popup UI for the selection of numbers
 		pop = new UIPop(size, GP.panel[3]);
 		for(int ctr = 0; ctr<size; ctr++){
 			final int popCounter = ctr+1;
 
 			pop.btn[ctr].addActionListener(new ActionListener(){
 				public void actionPerformed(ActionEvent e){
-					System.out.println("entered a popup");
 					int size = pop.size;
+
+					// set the picture of the number selected to the board
 					GP.changePicture(board.btn[pop.btnX][pop.btnY],"img/box/"+size+"x"+size+"/normal/"+popCounter+".png");
-					board.setSudokuArray(popCounter, isAns,pop.btnX, pop.btnY);
-					
+					board.setSudokuArray(popCounter, isAns, pop.btnX, pop.btnY);
 					pop.field.setForeground(java.awt.Color.black);
+
+					// hide the popup
 					pop.setVisible(false,0,0,0);
-					
+
+					// open up the game and the status
 					status.setVisible(true);
-					
 					game.setVisible(isAns);
 
+					// TO BE CORRECTED: if the number of answered blocks equals the size of the board,
+					// then we validate the answers
 					if(isAns && board.getAns() == size*size){
 						int sudoku[][][] = board.getSudokuArray();
 						Subgrid subgrid[] = new Subgrid[sudoku.length];
@@ -273,19 +309,25 @@ public class SudokuBee extends Thread{
 			});
 		}
 
+		// basically key actions when the user enters 
+		// something into the field in the popup
 		pop.field.addKeyListener(new KeyListener(){
 			public void keyReleased(KeyEvent eee){
 				String str=pop.field.getText();
-				if(str.length()>2 || !(eee.getKeyCode()>47 && eee.getKeyCode()<58 || eee.getKeyCode()>95 && eee.getKeyCode()<106 || eee.getKeyCode()==KeyEvent.VK_BACK_SPACE || eee.getKeyCode()==KeyEvent.VK_ENTER) ){
+
+				// if not valid input
+				if(str.length() > 2 || !(eee.getKeyCode() > 47 && eee.getKeyCode() < 58 || eee.getKeyCode() > 95 && eee.getKeyCode() < 106 || eee.getKeyCode() == KeyEvent.VK_BACK_SPACE || eee.getKeyCode() == KeyEvent.VK_ENTER) ){
 					try{
-						pop.field.setText(str.substring(0,str.length()-1));
+						pop.field.setText(str.substring(0, str.length() - 1));
 					} catch(Exception ee){}
-				}
-				else if(eee.getKeyCode()>47 && eee.getKeyCode()<58 || eee.getKeyCode()>95 && eee.getKeyCode()<106 || eee.getKeyCode()==KeyEvent.VK_BACK_SPACE){
+				} // if valid input (numbers)
+				else if(eee.getKeyCode() > 47 && eee.getKeyCode() < 58 || eee.getKeyCode() > 95 && eee.getKeyCode() < 106 || eee.getKeyCode() == KeyEvent.VK_BACK_SPACE){
 					try{
-						if(Integer.parseInt(str)>pop.size)
+						// if the value of str is greater than the no. of valid numbers in the puzzle
+						// display red
+						if(Integer.parseInt(str) > pop.size)
 							pop.field.setForeground(java.awt.Color.red);
-						else
+						else // otherwise black (normal)
 							pop.field.setForeground(java.awt.Color.black);
 					} catch(Exception e){}
 				}
@@ -294,11 +336,16 @@ public class SudokuBee extends Thread{
 			public void keyTyped(KeyEvent eee){}
 
 			public void keyPressed(KeyEvent e){
+				// if ENTER KEY is pressed
 				if(e.getKeyCode() == KeyEvent.VK_ENTER){
-					String str=pop.field.getText();
-					if(str.length() == 0){
+					String str = pop.field.getText();
+					
+					if (str.length() == 0) {
+						// change the number on the grid to a nothing value
 						GP.changePicture(board.btn[pop.btnX][pop.btnY],"img/box/"+pop.size+"x"+pop.size+"/normal/0.png");
-						board.setSudokuArray(0, false,pop.btnX, pop.btnY);
+						
+						board.setSudokuArray(0, false, pop.btnX, pop.btnY);
+						
 						pop.setVisible(false,0,0,0);
 						status.setVisible(true);
 						game.setVisible(isAns);
