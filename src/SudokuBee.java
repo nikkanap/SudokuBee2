@@ -32,7 +32,7 @@ public class SudokuBee extends Thread{
 	private int numOnlook, numEmp, numCycle;
 
 	// isAns = indicates whether the board is in answer sheet mode or puzzle creation state
-	private boolean isAns = false, generate = true, start = false, gameMode = true, isSolved = false;
+	private boolean isAns = false, generate = true, startFlag =  false, gameMode = true, isSolved = false;
 	private Tunog snd, error;
 	private JFrame frame = new JFrame();
 	private Container container = frame.getContentPane();
@@ -68,6 +68,7 @@ public class SudokuBee extends Thread{
 		GP.play.addActionListener(new ActionListener(){
 			public void actionPerformed(ActionEvent e){
 				// opens up the sudoku game background
+				sop("Entered GP.play");
 				mainGame(); 
 				status("");
 				isAns = true;
@@ -82,12 +83,12 @@ public class SudokuBee extends Thread{
 				generate = true;
 				gameMode = true;
 				isSolved = false;
-				
+
 				// starting the animation sequence
 				try{
 					start();
 				} catch(Exception ee){
-					start = true;
+					startFlag = true;
 				}
 
 				// generates the popup for the numbers selection
@@ -445,8 +446,6 @@ public class SudokuBee extends Thread{
 				game.setVisible(false);
 				status.setVisible(false);
 				isSolved = false;
-
-				// 
 				exit(2);
 			}
 		});
@@ -564,7 +563,8 @@ public class SudokuBee extends Thread{
 					try{
 						start();
 					} catch(Exception ee){
-						start = true;
+						sop("there's an exception");
+						startFlag = true;
 					}
 				} catch(Exception ee){
 					solve.decompose();
@@ -580,6 +580,7 @@ public class SudokuBee extends Thread{
 	// USED IN menu(), solve(), and exit()
 	public void run(){
 		while(true){
+			sop("Beginning of run() loop");
 			try{
 				solve.decompose();
 				solve = null;
@@ -588,6 +589,7 @@ public class SudokuBee extends Thread{
 			
 			// if in game mode and not creation mode
 			if(gameMode){
+				sop("Gamemode == true");
 				status.setVisible(false);
 
 				// create a new result file
@@ -608,6 +610,7 @@ public class SudokuBee extends Thread{
 
 				// keep changing the pic if abc isn't done every 100ms (methinks its ms)
 				while(!abc.isDone()){
+					sop("entered abc loop");
 					delay(100);
 					animate.changePic(abc.getBestSolution());
 				}
@@ -619,6 +622,7 @@ public class SudokuBee extends Thread{
 				if(generate){
 					// generate a sudoku board with empty grids and
 					// display it in the board
+
 					GenerateSudoku gen = new GenerateSudoku(abc.getBestSolution());
 					board(gen.getSudoku(), false);
 
@@ -707,10 +711,14 @@ public class SudokuBee extends Thread{
 			}
 
 			game.setVisible(0);
-			start = false;
+			startFlag = false;
 
-			// wait until the value of start becomes true
-			while(!start);
+			// added delay to have something inside of the loop
+			// while waiting for startFlag to become true
+			while(!startFlag) {
+				delay(100);
+			}
+			sop("RUN(): reached the END");
 		}
 	}
 
@@ -930,6 +938,7 @@ public class SudokuBee extends Thread{
 					}
 					// exiting back to the sudoku game 
 					else if(exit.num == 2){
+						sop("Entered exit.num == 2");
 						board.decompose();
 						board = null;
 						game.decompose();
@@ -938,24 +947,34 @@ public class SudokuBee extends Thread{
 						status = null;
 						pop.decompose();
 						pop = null;
-						
-						mainGame();
+
+						// opens up the sudoku game background
+						mainGame(); 
 						status("");
 						isAns = true;
 						int size = (options.sz+2)*3;
+
+						// generates the sudoku board
 						board(new int[size][size][2], true);
+
 						numEmp = 100;
 						numOnlook = 200;
 						numCycle = 100000000;
 						generate = true;
 						gameMode = true;
+						isSolved = false;
+					
 
+						// starting the animation sequence
 						try{
 							start();
 						} catch(Exception ee){
-							start = true;
+							startFlag = true;
 						}
+
+						// generates the popup for the numbers selection
 						popUp(size);
+
 					}
 					// save the current progress of the file and 
 					// return to the sudoku game
