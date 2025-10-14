@@ -7,7 +7,7 @@ class ABC extends Thread{
 	private int[][] emptyCell;
 	private int maxCycle, cycle;
 	private int employedSize, numCell, onlookerSize, scoutSize, maxEmptyCell, fitestBee = -1;
-	private double maxFit=0;
+	private double maxFit = 0;
 
 	private Bee[] bee;
 	private Bee bestBee;
@@ -46,7 +46,7 @@ class ABC extends Thread{
 				bee[i] = greedy.greedySearch(bee[i],v);			//greedy
 				beeFitness = bee[i].getFitness();
 				maxFit = getMaxFit(maxFit, beeFitness, i);		//storing of bestbee
-				sumFitness = sumFitness+beeFitness;
+				sumFitness = sumFitness + beeFitness;
 			}
 
 			//onlooker bee phase
@@ -96,10 +96,10 @@ class ABC extends Thread{
 					maxFit = getMaxFit(maxFit, bee[minSet[i]].getFitness(), minSet[i]);	//storing of best bee
 				}
 			}
-			printer.print((cycle+1)+"\t"+bestBee.getFitness());
+			printer.print((cycle + 1) + "\t" + bestBee.getFitness());
 			v = null;
 		}
-		printer.print((cycle)+"\t"+bestBee.getFitness());
+		printer.print((cycle) + "\t" + bestBee.getFitness());
 	}
 	
 	protected boolean isDone(){
@@ -115,7 +115,7 @@ class ABC extends Thread{
 		int subDimX = problem.length/subDimY;
 		for(int ctr = 0, xCount = 0; ctr<problem.length; ctr++, xCount++){
 			subgrid[ctr] = new Subgrid(xCount*subDimX, ((ctr/subDimY)*subDimY), subDimX, subDimY);
-			if((ctr+1)%subDimY == 0 && ctr>0)
+			if((ctr + 1)%subDimY == 0 && ctr>0)
 				xCount =- 1;
 		}
 
@@ -157,15 +157,15 @@ class ABC extends Thread{
 	}
 
 	protected String getInfo(){
-		return bestBee.getFitness()+" "+cycle+" ";
+		return bestBee.getFitness() + " " + cycle + " ";
 	}
 
 	protected String getCycle(){
-		return "cycles:\t"+cycle;
+		return "cycles:\t" + cycle;
 	}
 
 	protected String getCycles(){
-		return cycle+"";
+		return cycle + "";
 	}
 
 	protected double getFitness(){
@@ -201,7 +201,7 @@ class ABC extends Thread{
 
 		int xij = bee[i].getSolution()[emptyCell[j][0]][emptyCell[j][1]][0], xkj = bee[k].getSolution()[emptyCell[j][0]][emptyCell[j][1]][0];
 		int neededNum[] = subgrid[emptyCell[j][2]].getNeededNum();
-		int vij = neededNum[(int)Math.ceil(xij+Math.abs(rand.nextDouble()*(xij-xkj)))%neededNum.length];
+		int vij = neededNum[(int)Math.ceil(xij + Math.abs(rand.nextDouble()*(xij-xkj)))%neededNum.length];
 		Bee newBee = new Bee(subgrid);
 		newBee.swap(bee[i].getCopy(), emptyCell[j][2], emptyCell[j][0], emptyCell[j][1], xij, vij);
 		return newBee;
