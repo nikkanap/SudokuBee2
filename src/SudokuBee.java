@@ -1,4 +1,6 @@
 import javax.swing.JFrame;
+import javax.swing.SwingUtilities;
+
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 import java.awt.event.KeyListener;
@@ -27,6 +29,8 @@ public class SudokuBee extends Thread{
 	private UIHelp help;
 	private int btnX, btnY;
 	private int numOnlook, numEmp, numCycle;
+
+	// isAns = indicates whether the board is in answer sheet mode or puzzle creation state
 	private boolean isAns = false, generate = true, start = false, gameMode = true, isSolved = false;
 	private Tunog snd, error;
 	private JFrame frame = new JFrame();
@@ -52,7 +56,9 @@ public class SudokuBee extends Thread{
 		frame.setResizable(false);
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 	}
+	
 
+	// generates the main menu UI
 	private void menu(){
 		// opening up a general panel for a bunch of stuff
 		GP = new generalPanel(container);
@@ -85,6 +91,7 @@ public class SudokuBee extends Thread{
 
 				// generates the popup for the numbers selection
 				popUp(size);
+				
 			}
 		});
 
@@ -228,7 +235,7 @@ public class SudokuBee extends Thread{
 	// USED IN menu(), open(), run(), status(), exit()
 	private void board(int sudokuArray[][][], boolean isNull){
 		// load panel 5 (most likely panel for the board)
-		GP.setVisible(5); 
+		GP.setVisible(5); // originally 5; 
 
 		// create the board UI
 		board = new UIBoard(sudokuArray, isNull, GP.panel[5]);
@@ -258,7 +265,8 @@ public class SudokuBee extends Thread{
 			}
 		}
 	}
-		
+	
+	// generates the popUp for answer (number) selection and erasing
 	// USED IN menu(), open(), status(), exit() 
 	private void popUp(int size){
 		try{
@@ -340,27 +348,41 @@ public class SudokuBee extends Thread{
 				if(e.getKeyCode() == KeyEvent.VK_ENTER){
 					String str = pop.field.getText();
 					
+					// if nothing was entered
 					if (str.length() == 0) {
 						// change the number on the grid to a nothing value
 						GP.changePicture(board.btn[pop.btnX][pop.btnY],"img/box/"+pop.size+"x"+pop.size+"/normal/0.png");
 						
+						// updates the sudoku array
 						board.setSudokuArray(0, false, pop.btnX, pop.btnY);
 						
+						// closes the popup and reopens the game and status
 						pop.setVisible(false,0,0,0);
 						status.setVisible(true);
 						game.setVisible(isAns);
 					}
-					else{
+					else{ // if something was entered
 						try{
 							int size = pop.size, num = Integer.parseInt(str);
+							
+							// if value enterd was valid (1 - 9 if size = 9)
+							// then we add that answer to the board and sudoku array
 							if(num <= size && num >= 1){
+								// change the value of the selected grid on the board 
 								GP.changePicture(board.btn[pop.btnX][pop.btnY],"img/box/"+size+"x"+size+"/normal/"+num+".png");
+								
+								// update the sudoku array
 								board.setSudokuArray(num, isAns,pop.btnX, pop.btnY);
+
+								// closes the popup and reopens the status and game
 								pop.setVisible(false,0,0,0);
 								status.setVisible(true);
 								game.setVisible(isAns);
+
 								pop.field.setForeground(java.awt.Color.black);
 
+								// if in answer mode and the number of answers equals 
+								// the size of the board, we validate the answers
 								if(isAns && board.getAns() == size*size){
 									int sudoku[][][] = board.getSudokuArray();
 									Subgrid subgrid[] = new Subgrid[sudoku.length];
@@ -372,6 +394,7 @@ public class SudokuBee extends Thread{
 										if((ctr+1)%subDimY == 0 && ctr>0)
 											xCount =- 1;
 									}
+									
 									if(new Validator(sudoku, subgrid).checkAnswer())
 										exit(5);
 								}
@@ -386,6 +409,7 @@ public class SudokuBee extends Thread{
 			}
 		});
 
+		// for erasing answers
 		pop.erase.addActionListener(new ActionListener(){
 			public void actionPerformed(ActionEvent e){
 				GP.changePicture(board.btn[pop.btnX][pop.btnY],"img/box/"+pop.size+"x"+pop.size+"/normal/0.png");
@@ -393,8 +417,10 @@ public class SudokuBee extends Thread{
 				pop.setVisible(false,0,0,0);
 				status.setVisible(true);
 				game.setVisible(isAns);
-				}
-			});
+			}
+		});
+
+		// closing the popup
 		pop.cancel.addActionListener(new ActionListener(){
 			public void actionPerformed(ActionEvent e){
 				pop.setVisible(false,0,0,0);
@@ -404,31 +430,46 @@ public class SudokuBee extends Thread{
 		});
 	}
 
+	// generating the game panel
+	// USED IN menu(), open(), and exit()
 	private void mainGame(){
+		// generate the UIGame in panel 6 and make it visible
 		GP.setVisible(6);
 		game = new UIGame(GP.panel[6]);
+
+		sop("Entered mainGame");
+		// playing a new game (TO BE FIXED)
 		game.newGame.addActionListener(new ActionListener(){
 			public void actionPerformed(ActionEvent e){
 				game.setVisible(false);
 				status.setVisible(false);
 				isSolved = false;
+
+				// 
 				exit(2);
-				}
-			});
+			}
+		});
+
+		// exiting the game (not the program)
 		game.exit.addActionListener(new ActionListener(){
 			public void actionPerformed(ActionEvent e){
 				game.setVisible(false);
 				status.setVisible(false);
+				sop("Exiting maingame");
 				exit(1);
-				}
-			});
+			}
+		});
+
+		// opening the optionsUI
 		game.options.addActionListener(new ActionListener(){
 			public void actionPerformed(ActionEvent e){
 				game.setVisible(false);
 				status.setVisible(false);
 				options.setVisible(true,1);
-				}
-			});
+			}
+		});
+
+		// solving the game (TO BE FIXED)
 		game.solve.addActionListener(new ActionListener(){
 			public void actionPerformed(ActionEvent e){
 				game.setVisible(false);
@@ -436,8 +477,10 @@ public class SudokuBee extends Thread{
 				game.solve.setEnabled(false);
 				solve();
 				game.solve.setEnabled(true);
-				}
-			});
+			}
+		});
+
+		// opening helpUI
 		game.help.addActionListener(new ActionListener(){
 			public void actionPerformed(ActionEvent e){
 				help(5);
@@ -445,21 +488,28 @@ public class SudokuBee extends Thread{
 		});
 	}
 
+	// generating the helpUI and making it visible
+	// USED IN menu() and mainGame()
 	private void help(int num){
+		// adding helpUI to panel 0 and making it visible
 		GP.setVisible(0);
 		help = new UIHelp(GP.panel[0], num);
+
+		// going to the next instruction
 		help.next.addActionListener(new ActionListener(){
 			public void actionPerformed(ActionEvent e){
 				help.increase();
 			}
 		});
 
+		// going to the previous instruction
 		help.back.addActionListener(new ActionListener(){
 			public void actionPerformed(ActionEvent e){
 				help.decrease();
 			}
 		});
 
+		// leaving the helpUI
 		help.cancel.addActionListener(new ActionListener(){
 			public void actionPerformed(ActionEvent e){
 				help.decompose();
@@ -469,8 +519,12 @@ public class SudokuBee extends Thread{
 		});
 	}
 
+	// for solving the sudoku puzzle
+	// USED IN mainGame() and exit()
 	private void solve(){
 		solve = new UISolve(GP.solve);
+
+		// leaving the solveUI
 		solve.cancel.addActionListener(new ActionListener(){
 			public void actionPerformed(ActionEvent e){
 				status.setVisible(true);
@@ -481,12 +535,16 @@ public class SudokuBee extends Thread{
 			}
 		});
 
+		// this changes when the user clicks on "Experiment Mode"
+		// in the solveUI
 		solve.mode.addActionListener(new ActionListener(){
 			public void actionPerformed(ActionEvent e){
 				solve.changeMode();
 			}
 		});
 
+		// processes the solving of the sudoku board
+		// TO BE FIXED
 		solve.solve.addActionListener(new ActionListener(){
 			public void actionPerformed(ActionEvent e){
 				status.setVisible(false);
@@ -499,11 +557,8 @@ public class SudokuBee extends Thread{
 
 					if(numEmp >= numOnlook || numEmp<2)
 						throw new Exception();
-
-					if(solve.modeNum == 0)
-						gameMode = true;
-					else
-						gameMode = false;
+					
+					gameMode = (solve.modeNum == 0) ? true : false;
 
 					try{
 						start();
@@ -520,6 +575,8 @@ public class SudokuBee extends Thread{
 		});
 	}
 
+	// THREAD method: runs when start() is called
+	// USED IN menu(), solve(), and exit()
 	public void run(){
 		while(true){
 			try{
@@ -528,104 +585,148 @@ public class SudokuBee extends Thread{
 			} catch(Exception e){}
 			game.setVisible(1);
 			
+			// if in game mode and not creation mode
 			if(gameMode){
 				status.setVisible(false);
+
+				// create a new result file
 				PrintResult printer = new PrintResult("results/.xls");
 				int sudoku[][][] = board.getSudokuArray();
-				ABC abc = new ABC(printer, sudoku,numEmp,numOnlook, numCycle);
+				ABC abc = new ABC(printer, sudoku, numEmp, numOnlook, numCycle);
+				
+				// run the generation animation at the special panel
 				Animation animate = new Animation(sudoku, GP.special);
 				board.decompose();
 				board = null;
-				abc.start();
+
+				// start the artificial bee colony thread
+				abc.start(); 
+
+				// delay cause yes
 				delay(100);
 
+				// keep changing the pic if abc isn't done every 100ms (methinks its ms)
 				while(!abc.isDone()){
 					delay(100);
 					animate.changePic(abc.getBestSolution());
 				}
+				
 				animate.decompose();
 				animate = null;
 
+				// if generating a game rather than loading an existing game
 				if(generate){
+					// generate a sudoku board with empty grids and
+					// display it in the board
 					GenerateSudoku gen = new GenerateSudoku(abc.getBestSolution());
 					board(gen.getSudoku(), false);
+
 					gen = null;
 					isSolved = false;
 					abc = null;
-				}
-				else{
-					if(abc.getFitness() == 1){
+				} // if we're loading an existing game
+				else {
+					// if existing game is already solved, go to the exitUI 
+					// and display the finished game
+					if (abc.getFitness() == 1){
 						exit(8);
 						board = new UIBoard(abc.getBestSolution(), GP.panel[5]);
-						}
-					else{
+					}
+					// just show the partially completed puzzle
+					else {
 						board(abc.getBestSolution(), false);
 						isSolved = false;
 					}
 					abc = null;
 				}
+
 				printer.close();
 				printer.delete();
 				printer = null;
 				status.setVisible(true);
-			}
+			} // if we're creating our own puzzle
 			else {
+				// create a new result file for saving the created puzzle
 				String file = "results/result.xls";
 				PrintResult printer = new PrintResult(file);
 
 				status.setVisible(false);
 				String cycle = "", time = "";
+
+				// start the ABC 
 				ABC abc = new ABC(printer, board.getSudokuArray(),numEmp,numOnlook, numCycle);
 				abc.start();
 				double startTime = printer.getTime();
 
+				// wait until ABC thread is done running
 				while(!abc.isDone());
+
 				double end = (printer.getTime());
 				double seconds = ((end-startTime)/1000);
+
+				// update the time
 				printer.print("\nCycles:\t "+abc.getCycles()+"\nTime:\t"+seconds);
 				printer.close();
 				printer = null;
+
 				game.setVisible(0);
 				Runtime rt = Runtime.getRuntime();
+
 				try{
-					rt.exec("rundll32 SHELL32.DLL,ShellExec_RunDLL "+file);
+					rt.exec("rundll32 SHELL32.DLL,ShellExec_RunDLL " + file);
 				} catch(Exception ee){}
 				
 				board.decompose();
 				board = null;
+
+				// if the board is finished/solved
+				// open the exitUI and display the finished board
 				if(abc.getFitness() == 1){
 					exit(8);
 					board = new UIBoard(abc.getBestSolution(), GP.panel[5]);
-				}
+				} // just show the partially completed puzzle
 				else{
 					board(abc.getBestSolution(), false);
 					isSolved = false;
 				}
+
 				abc.decompose();
 				abc = null;
 				rt = null;
 				status.setVisible(true);
 			}
+
 			game.setVisible(0);
 			start = false;
+
+			// wait until the value of start becomes true
 			while(!start);
 		}
 	}
 
+	// just a delay method
 	protected void delay(int newDelay){
 		try{
 			sleep(newDelay);
 		} catch(InterruptedException err){}
 	}
 
+	// handles the statusIU during the game (save game, open a game, reset the game, etc.)
+	// USED IN menu(), open(), status(), and exit()
 	private void status(String str){
+		// open the statusIU on panel 4
 		status = new UIStatus(str, GP.panel[4]);
+
+		// yes and no buttons shows up when clicking create game
+		// if yes, solidify the entered values and play the game
 		status.yes.addActionListener(new ActionListener(){
 			public void actionPerformed(ActionEvent e){
+				sop("Entered status yes");
 				int sudoku[][][] = board.getSudokuArray();
 				Subgrid subgrid[] = new Subgrid[sudoku.length];
 				int subDimY = (int)Math.sqrt(sudoku.length);
 				int subDimX = sudoku.length/subDimY;
+				
 				for(int ctr = 0, xCount = 0; ctr<sudoku.length; ctr++, xCount++){
 					subgrid[ctr] = new Subgrid(xCount*subDimX, ((ctr/subDimY)*subDimY), subDimX, subDimY);
 					if((ctr+1)%subDimY == 0 && ctr>0)
@@ -633,6 +734,8 @@ public class SudokuBee extends Thread{
 				}
 
 				Validator val = new Validator(sudoku, subgrid);
+				// if the created sudoku puzzle is valid, 
+				// then solidify the generated puzzle
 				if(val.checkValidity()){
 					isAns = true;
 					status.decompose();
@@ -641,27 +744,37 @@ public class SudokuBee extends Thread{
 					pop = null;
 					board.decompose();
 					board = null;
+
+					// display the empty sudoku board
 					board(sudoku,false);
 					game.setVisible(true);
+
+					// generate the popUpIU
 					popUp(sudoku.length);
 					status("");
 				}
 				else {
+					// display "Incorrect Puzzle"
 					exit(4);
 				}
+
 				val = null;
 				isSolved = false;
 			}
 		});
 
+		// exit the puzzle creation and return to main menu
 		status.no.addActionListener(new ActionListener(){
 			public void actionPerformed(ActionEvent e){
+				sop("Entered status no");
 				exit(1);
 			}
 		});
 
+		// open the loadUI 
 		status.open.addActionListener(new ActionListener(){
 			public void actionPerformed(ActionEvent e){
+				// hide the game main buttons and the status buttons
 				game.setVisible(false);
 				status.setVisible(false);
 				isSolved = false;
@@ -669,13 +782,17 @@ public class SudokuBee extends Thread{
 			}
 		});
 
+		// open the saveUI
 		status.save.addActionListener(new ActionListener(){
 			public void actionPerformed(ActionEvent e){
+				// hide the game main buttons and the status buttons
 				game.setVisible(false);
 				status.setVisible(false);
 				save();
 			}
 		});
+
+		// open the resetUI
 		status.reset.addActionListener(new ActionListener(){
 			public void actionPerformed(ActionEvent e){
 				game.setVisible(false);
@@ -685,11 +802,20 @@ public class SudokuBee extends Thread{
 		});
 	}
 
+	// handles saving the current sudoku game
 	private void save(){
+		// load the saveUI to panel 2
 		save = new UISave(GP.panel[2]);
+
+		// focus on save.field element
 		save.field.grabFocus();
+
+		
+		// hide the game buttons and the status buttons
 		status.setVisible(false);
 		game.setVisible(false);
+
+		// cancelling brings u back to the sudoku game
 		save.cancel.addActionListener(new ActionListener(){
 			public void actionPerformed(ActionEvent e){
 				game.setVisible(true);
@@ -699,6 +825,7 @@ public class SudokuBee extends Thread{
 			}
 		});
 
+		// save the current game (as .sav file)
 		save.save.addActionListener(new ActionListener(){
 			public void actionPerformed(ActionEvent e){
 				saveFileName = save.field.getText();
@@ -706,6 +833,7 @@ public class SudokuBee extends Thread{
 				int num = saving.save(saveFileName, board.getSudokuArray());
 				save.decompose();
 				GP.setVisible(5);
+
 				if(saveFileName.length() > 0 && !(saveFileName.contains("/") || saveFileName.contains("\\") || saveFileName.contains(":")  || saveFileName.contains("*") || saveFileName.contains("?")  || saveFileName.contains("\"") || saveFileName.contains("<") || saveFileName.contains(">"))&& num == 0){
 					saveFileName="";
 					game.setVisible(true);
@@ -756,9 +884,16 @@ public class SudokuBee extends Thread{
 		});
 	}
 
+	// handles the exitUI
 	private void exit(int num){
+		// exit gets turned to null each time it's called,
+		// so we have to check if exit is null
 		if(exit == null){
 			exit = new UIExit(GP.panel[0], num);
+
+			sop("Entered exit UI generation");
+
+			// pressing yes on any exit yes button 
 			exit.yes.addActionListener(new ActionListener(){
 				public void actionPerformed(ActionEvent e){
 					GP.setVisibleButton(true);
@@ -768,8 +903,10 @@ public class SudokuBee extends Thread{
 					} catch(Exception ee){}
 
 					exit.decompose();
+					// exiting/ending the program
 					if(exit.num == 0)
 						System.exit(0);
+					// exiting the ongoing sudoku game
 					else if(exit.num == 1){
 						board.decompose();
 						board = null;
@@ -781,6 +918,7 @@ public class SudokuBee extends Thread{
 						pop = null;
 						GP.setVisible(7);
 					}
+					// exiting back to the sudoku game 
 					else if(exit.num == 2){
 						board.decompose();
 						board = null;
@@ -809,12 +947,15 @@ public class SudokuBee extends Thread{
 						}
 						popUp(size);
 					}
+					// save the current progress of the file and 
+					// return to the sudoku game
 					else if(exit.num == 9){
 						GP.setVisible(5);
 						SaveSudoku saving = new SaveSudoku();
 						saving.delete(saveFileName);
 						saving.save(saveFileName, board.getSudokuArray());
 					}
+					// reset the board back to its non-answered version
 					else if(exit.num == 10){
 						isSolved = false;
 						GP.setVisible(5);
@@ -828,6 +969,7 @@ public class SudokuBee extends Thread{
 				}
 			});
 
+			// pressing no on any exit button
 			exit.no.addActionListener(new ActionListener(){
 				public void actionPerformed(ActionEvent e){
 					GP.setVisibleButton(true);
@@ -837,14 +979,20 @@ public class SudokuBee extends Thread{
 					} catch(Exception ee){}
 
 					exit.decompose();
+					
+					// just return back to mainMenu
 					if(exit.num == 0)
 						GP.setVisible(7);
+					// just return back to the sudoku game
 					else if(exit.num == 1 || exit.num == 2 || exit.num == 6 || exit.num == 10)
 						GP.setVisible(5);
+					// just return to the saveUI (with the sudoku game in the bg)
 					else if(exit.num == 9){
 						GP.setVisible(5);
 						save();
 					}
+
+					// make exitUI to null
 					exit = null;
 				}
 			});
@@ -854,27 +1002,36 @@ public class SudokuBee extends Thread{
 					GP.setVisibleButton(true);
 					game.setVisible(true);
 					status.setVisible(true);
-
+					
+					// open the solveUI and 
 					if(exit.num == 7)
 						solve();
+					// game is solved so show the finished board 
+					// and change the cursor
 					else if(exit.num == 5){
 						GP.setVisible(5);
 						isSolved = true;
 						board.changeCursor();
 					}
+					// game is solved so show the finished board
 					else if(exit.num == 8){
 						GP.setVisible(5);
 						isSolved = true;
 					}
+					// num is 1, 2, 3, and 9
+					// close the board and return to main menu
 					else if(exit.num != 4 && exit.num != 6){
 						board.decompose();
 						board = null;
 						GP.setVisible(7);
 					}
+					// returns to the game panel (panel 5) without opening the game buttons
 					else if(exit.num == 4){
+						sop("Entered num 4 exit");
 						GP.setVisible(5);
 						game.setVisible(false);
 					}
+					// exit.num == 6: returns to the game panel with game buttons
 					else {
 						GP.setVisible(5);
 					}	
@@ -886,9 +1043,11 @@ public class SudokuBee extends Thread{
 		}
 	}
 
+	// handles the optionsUI and makes it visible
 	private void options(){
 		options = new UIOptions(GP.panel);
 
+		// exiting the optionsUI
 		options.exit.addActionListener(new ActionListener(){
 			public void actionPerformed(ActionEvent e){
 				try{
@@ -904,19 +1063,11 @@ public class SudokuBee extends Thread{
 			}
 		});
 
+		// action listeners for the left and right buttons
+		// for setting the grid size (6x6, 9x9, etc.)
 		options.left[0].addActionListener(new ActionListener(){
 			public void actionPerformed(ActionEvent e){
 				options.setSize(false);
-			}
-		});
-
-		options.left[1].addActionListener(new ActionListener(){
-			public void actionPerformed(ActionEvent e){
-				options.setSound(false);
-				if(options.snd == 1)
-					snd.stop();
-				else
-					snd.loop();
 			}
 		});
 
@@ -926,6 +1077,18 @@ public class SudokuBee extends Thread{
 			}
 		});
 
+		// action listeners for the left and right buttons
+		// for setting the sound of the program
+		options.left[1].addActionListener(new ActionListener(){
+			public void actionPerformed(ActionEvent e){
+				options.setSound(false);
+				if(options.snd == 1)
+					snd.stop();
+				else
+					snd.loop();
+			}
+		});
+		
 		options.right[1].addActionListener(new ActionListener(){
 			public void actionPerformed(ActionEvent e){
 				options.setSound(true);
@@ -937,6 +1100,7 @@ public class SudokuBee extends Thread{
 		});
 	}
 
+	// shortcut for printing (System.out.println = sop)
 	private void sop(Object obj){
 		System.out.println(obj+"");
 	}

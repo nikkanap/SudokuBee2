@@ -86,8 +86,9 @@ public class generalPanel{
 			panel[4].setVisible(true);
 		}
 
-		if(num != -1 && num != -2)
+		if(num != -1 && num != -2) {
 			panel[num].setVisible(true);
+		}
 	}
 
 //JPanel

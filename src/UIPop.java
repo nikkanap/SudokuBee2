@@ -4,6 +4,7 @@ import javax.swing.JButton;
 import javax.swing.JTextField;
 import java.awt.Cursor;
 
+// UI for the number selection popup in the sudoku game
 public class UIPop extends generalPanel{
 	private JPanel pane;
 	private JPanel panel;
@@ -17,7 +18,7 @@ public class UIPop extends generalPanel{
 		this.pane = pane;
 		this.size = size;
 		panel = addPanel(pane, 5, 84, 500,500);
-		panel.setOpaque(true);
+		panel.setOpaque(false);
 		
 		if (size == 6)
 			sixButtons();
@@ -28,6 +29,7 @@ public class UIPop extends generalPanel{
 
 		bg = addLabel(panel, "img/game control/"+size+"x"+size+".png",0,0);
 		field.grabFocus();
+		
 	}
 
 	private void sixButtons(){
