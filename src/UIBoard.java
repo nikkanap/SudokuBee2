@@ -108,6 +108,7 @@ public class UIBoard{
 			ans++;
 		if(sudokuArray[x][y][0] != 0 && value == 0)
 			ans--;
+
 		sudokuArray[x][y][0] = value;
 		int num = 1;
 		if(!isAns && value != 0)
