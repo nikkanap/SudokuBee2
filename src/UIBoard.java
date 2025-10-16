@@ -9,19 +9,21 @@ public class UIBoard{
 	private JLabel board;
 	private int sudokuArray[][][];
 	private int size, startX, startY, inc, btnX, btnY, ans;
-	private int increment[] = {84,56,42};
+	private int increment[] = {56, 31, 20};
 	protected JButton btn[][];
 	private generalPanel gp = new generalPanel();
 	
 	UIBoard(){}
 
 	UIBoard(int sudokuArray[][][], JPanel pane){
+		sop("UIBOARD: constructor 1");
 		this.pane = pane;
 		this.sudokuArray = sudokuArray;
 		setConstants(false);
 	}
 
 	UIBoard(int sudokuArray[][][], boolean isNull, JPanel pane){
+		sop("UIBOARD: constructor 2");
 		this.pane = pane;
 		this.sudokuArray = sudokuArray;
 		ans = 0;
@@ -32,7 +34,9 @@ public class UIBoard{
 	}
 
 	private void fill(){
+		sop("UIBOARD: fill()");
 		size = sudokuArray.length;
+		sop("size = " + size);
 		for(int ctr = 0; ctr<size; ctr++){
 			for(int count = 0; count<size; count++){
 				sudokuArray[ctr][count][0] = 0;
@@ -42,10 +46,15 @@ public class UIBoard{
 	}
 
 	private void setConstants(boolean setCursor){
+		sop("UIBOARD: setConstants()");
 		size = sudokuArray.length;
+		sop("size = " + size);
 		startX = size/6+6;
+		sop("startX = " + startX);
 		startY = 86;
-		inc = increment[size/3-2];
+		sop("startY = " + startY);
+		inc = increment[(int) (size/Math.sqrt(size)-3)];
+		sop("inc = " + inc);
 		btn = new JButton[size][size];
 		
 		for(int ctr = 0, X = startX, Y = startY; ctr<size; ctr++, Y += inc, X = startX){
@@ -135,5 +144,9 @@ public class UIBoard{
 		sudokuArray = null;
 		btn = null;
 		gp = null;
+	}
+
+	private void sop(Object o) {
+		System.out.println(o+"");
 	}
 }
