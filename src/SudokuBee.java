@@ -72,7 +72,8 @@ public class SudokuBee extends Thread{
 				mainGame(); 
 				status("");
 				isAns = true;
-				int size = (options.sz+2)*3;
+				int size = (int) (Math.pow(options.sz + 3, 2));
+				sop("size: " + size);
 
 				// generates the sudoku board
 				board(new int[size][size][2], true);
@@ -281,6 +282,7 @@ public class SudokuBee extends Thread{
 		for(int ctr = 0; ctr<size; ctr++){
 			final int popCounter = ctr+1;
 
+			sop("POPUP(): ctr = " + ctr);
 			pop.btn[ctr].addActionListener(new ActionListener(){
 				public void actionPerformed(ActionEvent e){
 					int size = pop.size;
@@ -443,6 +445,7 @@ public class SudokuBee extends Thread{
 		// playing a new game (TO BE FIXED)
 		game.newGame.addActionListener(new ActionListener(){
 			public void actionPerformed(ActionEvent e){
+				sop("ENTERED game.newGame");
 				game.setVisible(false);
 				status.setVisible(false);
 				isSolved = false;
@@ -948,11 +951,14 @@ public class SudokuBee extends Thread{
 						pop.decompose();
 						pop = null;
 
+
 						// opens up the sudoku game background
 						mainGame(); 
+						sop("back to exit.num == 2");
 						status("");
 						isAns = true;
-						int size = (options.sz+2)*3;
+						int size = (int) (Math.pow(options.sz + 3, 2));
+						sop("size = " + size);
 
 						// generates the sudoku board
 						board(new int[size][size][2], true);
@@ -963,7 +969,6 @@ public class SudokuBee extends Thread{
 						generate = true;
 						gameMode = true;
 						isSolved = false;
-					
 
 						// starting the animation sequence
 						try{
