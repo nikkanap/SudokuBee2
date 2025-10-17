@@ -2,11 +2,12 @@ import javax.swing.JPanel;
 import javax.swing.JLabel;
 import javax.swing.JButton;
 
+// the UI for the options (settings)
 public class UIOptions extends generalPanel{
 	private JPanel panel[];
 	private JLabel bg;
 
-	private String size[]={"img\\exit\\size\\6x6.png","img\\exit\\size\\9x9.png","img\\exit\\size\\12x12.png"};
+	private String size[]={"img\\exit\\size\\9x9.png","img\\exit\\size\\16x16.png","img\\exit\\size\\25x25.png"};
 	private String sound[]={"img\\exit\\sound\\on.png","img\\exit\\sound\\off.png"};
 
 	protected JLabel sizeLabel, levelLabel, soundLabel;
@@ -16,7 +17,6 @@ public class UIOptions extends generalPanel{
 
 	protected int sz, lvl, snd, num;
 
-	// the UI for the options (settings)
 	UIOptions(JPanel panel[]){
 		this.panel = panel;
 		panel[1].setOpaque(true);
@@ -27,11 +27,11 @@ public class UIOptions extends generalPanel{
 			right[ctr] = addButton(panel[1], "img/exit/right.png", "img/exit/h_right.png",568,235+70*ctr);
 		}
 
-		sizeLabel = addLabel(panel[1], size[1], 389,237);
+		sizeLabel = addLabel(panel[1], size[0], 389,237);
 		soundLabel = addLabel(panel[1], sound[0], 389,308);
 		bg = addLabel(panel[1],"img/bg/options.png",100,99);
 
-		sz = 1;
+		sz = 0;
 		num = lvl = snd = 0;
 		//panel[1].setVisible(true);
 	}
@@ -47,6 +47,7 @@ public class UIOptions extends generalPanel{
 			if(sz == -1)
 				sz = 2;
 		}
+		sop("SELECTED SIZE FROM OPTIONS: " + sz);
 		changePicture(sizeLabel, size[sz]);
 	}
 
@@ -75,4 +76,5 @@ public class UIOptions extends generalPanel{
 		exit = no = null;
 		left[0] = right[0] = left[1] = right[1] = null;
 	}
+
 }

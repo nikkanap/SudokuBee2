@@ -44,3 +44,4 @@ obj/
 *.xcworkspace/
 build/
 target/
+out/
