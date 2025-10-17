@@ -1,6 +1,8 @@
 import javax.swing.JPanel;
 import javax.swing.JLabel;
 
+// animation sequence for generating the 
+// sudoku board before the start of the game
 public class Animation{
 	private JPanel pane;
 	private JLabel board;

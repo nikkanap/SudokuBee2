@@ -57,7 +57,6 @@ public class SudokuBee extends Thread{
 		frame.setResizable(false);
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 	}
-	
 
 	// generates the main menu UI
 	private void menu(){
@@ -104,7 +103,7 @@ public class SudokuBee extends Thread{
 				// hides the main menu buttons
 				GP.setVisibleButton(false);
 
-				int size = (options.sz + 2) * 3;
+				int size = (int) (Math.pow(options.sz + 3, 2));
 				isSolved = false;
 
 				// generates a sudoku boartd
@@ -122,7 +121,7 @@ public class SudokuBee extends Thread{
 				mainGame();
 
 				isAns = false;
-				int size = (options.sz+2)*3;
+				int size = (int) (Math.pow(options.sz + 3, 2));
 				isSolved = false;
 				
 				// generates a sudoku board

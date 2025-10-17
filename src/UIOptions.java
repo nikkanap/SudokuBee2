@@ -2,6 +2,7 @@ import javax.swing.JPanel;
 import javax.swing.JLabel;
 import javax.swing.JButton;
 
+// the UI for the options (settings)
 public class UIOptions extends generalPanel{
 	private JPanel panel[];
 	private JLabel bg;
@@ -16,7 +17,6 @@ public class UIOptions extends generalPanel{
 
 	protected int sz, lvl, snd, num;
 
-	// the UI for the options (settings)
 	UIOptions(JPanel panel[]){
 		this.panel = panel;
 		panel[1].setOpaque(true);
