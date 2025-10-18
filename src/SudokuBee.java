@@ -140,8 +140,7 @@ public class SudokuBee extends Thread{
 				GP.setVisibleButton(false);
 
 				// makes the options UI visible 1
-				options.page = 1; // always return to page 
-				options.refresh();
+				options.refreshPage(1);
 				options.setVisible(true, 0);
 			}
 		});
@@ -469,8 +468,7 @@ public class SudokuBee extends Thread{
 				game.setVisible(false);
 				status.setVisible(false);
 
-				options.page = 1; // always return to page 1
-				options.refresh();
+				options.refreshPage(1);
 				options.setVisible(true,1);
 			}
 		});

@@ -1,10 +1,5 @@
 import javax.swing.JPanel;
-import javax.swing.SwingUtilities;
-import javax.swing.SwingUtilities;
 import javax.swing.JLabel;
-
-import java.awt.Window;
-
 import javax.swing.JButton;
 
 // the UI for the options (settings)
@@ -36,6 +31,7 @@ public class UIOptions extends generalPanel{
 			right[ctr] = addButton(panel[1], "img/exit/right.png", "img/exit/h_right.png",568,235+70*ctr);
 		}
 
+		// set to size and sound at page 1
 		upperOption = addLabel(panel[1], size[0], 389,237);
 		lowerOption = addLabel(panel[1], sound[0], 389,308);
 		bg = addLabel(panel[1],"img/bg/options_1.png",100,99);
@@ -48,21 +44,20 @@ public class UIOptions extends generalPanel{
 
 	protected void increase(){
 		page++;
-		if(page == 3)
-			page = 1;
-
-		refresh();
+		page = (page == 3) ? 1 : page;
+		refreshPage(0);
 	}
 
 	protected void decrease(){
 		page--;
-		if(page == 0)
-			page = 2;
-
-		refresh();
+		page = (page == 0) ? 2 : page;
+		refreshPage(0);
 	}
 
-	protected void refresh() {
+	protected void refreshPage(int specificPage) {
+		// if no page is given, then we maintain the current page.
+		// otherwise, we refresh to a specific page
+		page = (specificPage == 0) ? page : specificPage;
 		sop("page " + page);
 		changePicture(upperOption, (page == 1) ? size[sz] : functionPenalty[fp]);
 		changePicture(lowerOption, (page == 1) ? sound[0] : "");
@@ -71,45 +66,20 @@ public class UIOptions extends generalPanel{
 
 	protected void setUpperOption(boolean isRight){
 		if (page == 1) {
-			if (isRight){
-				sz++;
-				if(sz == 3)
-					sz = 0;
-			}
-			else {
-				sz--;
-				if(sz == -1)
-					sz = 2;
-			}
+			sz += (isRight) ? 1 : -1;
+			sz = (sz == 3) ? 0 : (sz == -1) ? 2 : sz;
 			changePicture(upperOption, size[sz]);
 		} else {
-			if (isRight){
-				fp++;
-				if(fp == 3)
-					fp = 0;
-			}
-			else {
-				fp--;
-				if(fp == -1)
-					fp = 2;
-			}
+			fp += (isRight) ? 1 : -1;
+			fp = (fp == 3) ? 0 : (fp == -1) ? 2 : fp;
 			changePicture(upperOption, functionPenalty[fp]);
 		}
-		
 	}
 
 	protected void setLowerOption(boolean isRight){
 		if (page == 1) {
-			if (isRight){
-				snd++;
-				if(snd == 2)
-					snd = 0;
-			}
-			else {
-				snd--;
-				if(snd == -1)
-					snd = 1;
-			}
+			snd += (isRight) ? 1 : -1;
+			snd = (snd == 2) ? 0 : (snd == -1) ? 1 : snd;
 			changePicture(lowerOption, sound[snd]);
 		}
 	}
