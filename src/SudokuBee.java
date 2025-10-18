@@ -139,7 +139,9 @@ public class SudokuBee extends Thread{
 				// hides the main menu buttons
 				GP.setVisibleButton(false);
 
-				// makes the options UI visible
+				// makes the options UI visible 1
+				options.page = 1; // always return to page 
+				options.refresh();
 				options.setVisible(true, 0);
 			}
 		});
@@ -298,7 +300,6 @@ public class SudokuBee extends Thread{
 					status.setVisible(true);
 					game.setVisible(isAns);
 
-					// TO BE CORRECTED: if the number of answered blocks equals the size of the board,
 					// then we validate the answers
 					if(isAns && board.getAns() == size*size){
 						int sudoku[][][] = board.getSudokuArray();
@@ -467,6 +468,9 @@ public class SudokuBee extends Thread{
 			public void actionPerformed(ActionEvent e){
 				game.setVisible(false);
 				status.setVisible(false);
+
+				options.page = 1; // always return to page 1
+				options.refresh();
 				options.setVisible(true,1);
 			}
 		});
@@ -1100,13 +1104,13 @@ public class SudokuBee extends Thread{
 		// for setting the grid size (6x6, 9x9, etc.)
 		options.left[0].addActionListener(new ActionListener(){
 			public void actionPerformed(ActionEvent e){
-				options.setSize(false);
+				options.setUpperOption(false);
 			}
 		});
 
 		options.right[0].addActionListener(new ActionListener(){
 			public void actionPerformed(ActionEvent e){
-				options.setSize(true);
+				options.setUpperOption(true);
 			}
 		});
 
@@ -1114,21 +1118,37 @@ public class SudokuBee extends Thread{
 		// for setting the sound of the program
 		options.left[1].addActionListener(new ActionListener(){
 			public void actionPerformed(ActionEvent e){
-				options.setSound(false);
-				if(options.snd == 1)
-					snd.stop();
-				else
-					snd.loop();
+				options.setLowerOption(false);
+				if(options.page == 1) {
+					if(options.snd == 1)
+						snd.stop();
+					else
+						snd.loop();
+				}
 			}
 		});
 		
 		options.right[1].addActionListener(new ActionListener(){
 			public void actionPerformed(ActionEvent e){
-				options.setSound(true);
-				if(options.snd == 1)
-					snd.stop();
-				else
-					snd.loop();
+				options.setLowerOption(true);
+				if(options.page == 1) {
+					if(options.snd == 1)
+						snd.stop();
+					else
+						snd.loop();
+				}
+			}
+		});
+
+		options.rightNav.addActionListener(new ActionListener(){
+			public void actionPerformed(ActionEvent e){
+				options.increase();
+			}
+		});
+
+		options.leftNav.addActionListener(new ActionListener(){
+			public void actionPerformed(ActionEvent e){
+				options.decrease();
 			}
 		});
 	}

@@ -24,11 +24,14 @@ import javax.swing.JCheckBox;
 import javax.swing.JList;
 import javax.swing.JTabbedPane;
 import javax.swing.SpinnerDateModel;
+import javax.swing.SwingUtilities;
 import javax.swing.JList;
 import javax.swing.ListCellRenderer;
 import java.awt.Container;
 import java.awt.Font;
+import java.awt.Window;
 import java.awt.Color;
+import java.awt.Component;
 import java.awt.Cursor;
 import java.awt.FileDialog;
 import java.util.Calendar;
@@ -487,12 +490,22 @@ public class generalPanel{
 		img = new ImageIcon(photo);
 		label.setRolloverIcon(img);
 		img = null;
+		refreshPage(label);
 	}
 
 	protected void changePicture(JLabel label, String photo){
 		Icon img = new ImageIcon(photo);
 		label.setIcon(img);
 		img = null;
+		refreshPage(label);
+	}
+
+	// to avoid phantom images when options bg is replaced
+	private void refreshPage(Component c) {
+		Window window = SwingUtilities.getWindowAncestor(c);
+		if (window != null) {
+			window.repaint();
+		}
 	}
 
 	protected void sop(Object obj){
