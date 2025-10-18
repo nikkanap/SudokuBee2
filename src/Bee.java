@@ -123,8 +123,8 @@ class Bee{
 				sum += solution[r][c][0];
 				product *= solution[r][c][0];
 			}
-			penalty += Math.abs(sum - expectedSum);
-			penalty += Math.abs(Math.log(product) - Math.log(expectedProduct));
+			penalty += sum - expectedSum;
+			penalty += product - expectedProduct;
 		}
 		return penalty;
 	}
@@ -144,8 +144,8 @@ class Bee{
 				sum += solution[r][c][0];
 				product *= solution[r][c][0];
 			}
-			penalty += Math.abs(sum - expectedSum);
-			penalty += Math.abs(Math.log(product) - Math.log(expectedProduct));
+			penalty += sum - expectedSum;
+			penalty += product - expectedProduct;
 		}
 		return penalty;
 	}
@@ -168,8 +168,8 @@ class Bee{
 						sum += solution[r][c][0];
 						product *= solution[r][c][0];
 					}
-				penalty += Math.abs(sum - expectedSum);
-				penalty += Math.abs(Math.log(product) - Math.log(expectedProduct));
+				penalty += sum - expectedSum;
+				penalty += product - expectedProduct;
 			}
 		}
 		return penalty;
