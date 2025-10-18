@@ -49,7 +49,6 @@ public class Animation{
 	}
 
 	protected void changePic(int solution[][][]){
-		sop("Animation.changePic()");
 		for(int row = 0, row2 = size-1; row<size; row++, row2--){
 			for(int col = row, col2 = size-1; col<size; col++, col2--){
 				if(sudokuArray[row][col][1] == 1){
@@ -72,7 +71,6 @@ public class Animation{
 					btn[col2][row2][solution[col2][row2][0]].setVisible(true);
 				}
 			}
-			sop("");
 		}
 		sudokuArray = solution;
 	}
