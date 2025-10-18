@@ -6,13 +6,13 @@ This is the repository for Group 4's SudokuBee2 code.
 - [x] Write report (use own words, no plagiarism)
 - [x] Create table: filenames/directories & their purposes
 - [ ] Explain sub-grid constraint implementation with code snippet and line-by-line explanation
-- [ ] Diagram showing Sudoku puzzle representation in SudokuBee code
+- [ ] Create diagram showing Sudoku puzzle representation in SudokuBee code
 - [ ] Create table: general swarm intelligence procedures vs ABC algorithm code 
 
 ### Task 2: Development of SudokuBee2 Program
 - [x] Modify SudokuBee source code and rename as SudokuBee2
 - [x] Implement puzzle board sizes: 9x9 (default), 16x16, and 25x25
-- [ ] Save 16 Sudoku test instances in save directory
+- [x] Save 16 Sudoku test instances in save directory
 - [x] Add option for user to choose penalty function during fitness evaluation:
   - [x] (default) Missing numbers with intrinsic sub-grid constraint
   - [x] Sum-Product with intrinsic sub-grid constraint
