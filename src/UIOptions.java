@@ -9,7 +9,7 @@ public class UIOptions extends generalPanel{
 
 	private String size[]={"img\\exit\\size\\9x9.png","img\\exit\\size\\16x16.png","img\\exit\\size\\25x25.png"};
 	private String sound[]={"img\\exit\\sound\\on.png","img\\exit\\sound\\off.png"};
-	private String functionPenalty[] = {"img\\exit\\function penalty\\mode_1.png", "img\\exit\\function penalty\\mode_2.png", "img\\exit\\function penalty\\mode_3.png"};
+	private String functionPenalty[] = {"img\\exit\\function penalty\\mode_0.png", "img\\exit\\function penalty\\mode_1.png", "img\\exit\\function penalty\\mode_2.png"};
 
 	protected JLabel upperOption, levelLabel, lowerOption;
 	protected JButton exit, no, rightNav, leftNav;

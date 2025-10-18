@@ -17,14 +17,17 @@ class ABC extends Thread{
 	private String information = "";
 	private GreedySelection greedy = new GreedySelection();
 	private PrintResult printer;
+	private int fp;
 
-	ABC(PrintResult printer, int[][][] problem,int employedSize, int onlookerSize, int maxCycle){
+	ABC(PrintResult printer, int[][][] problem,int employedSize, int onlookerSize, int maxCycle, int fp){
+		System.out.println("USING FP " + fp);
 		//Setting of parameters
 		this.problem = problem;
 		this.maxCycle = maxCycle;
 		this.employedSize = employedSize;
 		this.onlookerSize = onlookerSize;
 		this.printer = printer;
+		this.fp = fp;
 
 		numCell = problem.length*problem.length;
 		scoutSize = (int)(0.1*employedSize);
@@ -43,7 +46,7 @@ class ABC extends Thread{
 			//employed bee phase
 			for(int i = 0; i<bee.length && maxFit != 1; i++){
 				v = neighborhoodSearch(i);								// neighborhood search
-				bee[i] = greedy.greedySearch(bee[i],v);			//greedy
+				bee[i] = greedy.greedySearch(bee[i],v,fp);			//greedy
 				beeFitness = bee[i].getFitness();
 				maxFit = getMaxFit(maxFit, beeFitness, i);		//storing of bestbee
 				sumFitness = sumFitness + beeFitness;
@@ -56,7 +59,7 @@ class ABC extends Thread{
 
 				for(int count = 0; count<maxOnlooker; count++){
 					v = neighborhoodSearch(i);											// neighborhood search
-					bee[i] = greedy.greedySearch(bee[i],v);						//greedy
+					bee[i] = greedy.greedySearch(bee[i],v,fp);						//greedy
 					maxFit = getMaxFit(maxFit, bee[i].getFitness(), i);		//storing of best bee
 					}
 				}
@@ -92,7 +95,7 @@ class ABC extends Thread{
 
 				for(int i = 0; i<scoutSize && maxFit != 1; i++){
 					v = new Bee(getProblemCopy(), subgrid);											//generating of new Solution
-					bee[minSet[i]] = greedy.greedySearch(bee[minSet[i]],v);					//greedy
+					bee[minSet[i]] = greedy.greedySearch(bee[minSet[i]],v,fp);					//greedy
 					maxFit = getMaxFit(maxFit, bee[minSet[i]].getFitness(), minSet[i]);	//storing of best bee
 				}
 			}
@@ -124,7 +127,7 @@ class ABC extends Thread{
 		bestBee = new Bee(subgrid);
 		for(int ctr = 0; ctr<employedSize; ctr++){
 			bee[ctr] = new Bee(getProblemCopy(), subgrid);
-			bee[ctr].setFitness(fit.calculateFitness(bee[ctr].getPenaltyValue()));
+			bee[ctr].setFitness(fit.calculateFitness(bee[ctr].getPenaltyValue(fp)));
 		}
 		bestBee.copyProblem(bee[0].getCopy());
 		bestBee.setFitness(bee[0].getFitness());

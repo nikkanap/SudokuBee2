@@ -44,22 +44,132 @@ class Bee{
 		}
 	}
 
-	protected int getPenaltyValue(){
+	protected double getPenaltyValue(int fp){
+		if (fp == 0) {
+			return getFunctionPenalty_MissingWithSubgrid();
+		} else if (fp == 1) {
+			return getFunctionPenalty_SumProductWithSubgrid();
+		} else {
+			return getFunctionPenalty_SumProductWithoutSubgrid();
+		}
+	}
+
+	private int getFunctionPenalty_MissingWithSubgrid() {
 		int penalty = 0;
-		customSet hor = new customSet();
-		customSet ver = new customSet();
-		for(int ctr = 0; ctr<solution.length; ctr++){
-			hor.clear();
-			ver.clear();
-			for(int ct = 0; ct<solution.length; ct++){
-				if(hor.contains(solution[ctr][ct][0]))
-					penalty++;
-				else
-					hor.add((solution[ctr][ct][0]));
-				if(ver.contains(solution[ct][ctr][0]))
-					penalty++;
-				else
-					ver.add((solution[ct][ctr][0]));
+		int n = solution.length;
+		
+		int subSize = (int) Math.sqrt(n);
+		customSet set = new customSet();
+
+		for(int r = 0; r < n; r++){
+			set.clear(); // clear the set of row
+			for(int c = 0; c < n; c++){
+				set.add((solution[r][c][0]));
+			}
+			penalty += (n - set.size());
+		}
+
+		for(int c = 0; c < n; c++){
+			set.clear(); // clear the set of columns
+			for(int r = 0; r < n; r++){
+				set.add((solution[r][c][0]));
+			}
+			penalty += (n - set.size());
+		}
+
+		// check for subgrids
+		 for (int sr = 0; sr < n; sr += subSize) {
+			for (int sc = 0; sc < n; sc += subSize) {
+				set.clear();
+				for (int r = sr; r < sr + subSize; r++)
+					for (int c = sc; c < sc + subSize; c++)
+						set.add(solution[r][c][0]);
+				penalty += (n - set.size());
+			}
+		}
+
+		return penalty;
+	}
+	
+	private double getFunctionPenalty_SumProductWithSubgrid() {
+		return 
+		getRowProductSumPenalty() +
+		getColumnProductSumPenalty() + 
+		getSubgridProductSumPenalty();
+	}
+
+	private double getFunctionPenalty_SumProductWithoutSubgrid() {
+		return 
+		getRowProductSumPenalty() +
+		getColumnProductSumPenalty();
+	}
+
+	private double getRowProductSumPenalty() {
+		int n = solution.length;
+		double penalty = 0;
+
+		// e.g. for a 4x4 grid, expectedSum = 1 + 2 + 3 + 4 = 10
+		// which is 4 * (4 + 1) / 2.0 = 4 * (5) / 2.0 = 20/2.0 = 10 
+		double expectedSum = n * (n + 1) / 2.0;
+		
+		// e.g. for a 4x4 grid, expectedProduct = 1 * 2 * 3 * 4 = 24
+		double expectedProduct = 1.0;
+		for(int i = 1; i <= n; i++) expectedProduct *= i;
+
+		// get the product and sum penalty for rows
+		for(int r = 0; r < n; r++) {
+			double sum = 0, product = 1;
+			for(int c = 0; c < n; c++) {
+				sum += solution[r][c][0];
+				product *= solution[r][c][0];
+			}
+			penalty += Math.abs(sum - expectedSum);
+			penalty += Math.abs(Math.log(product) - Math.log(expectedProduct));
+		}
+		return penalty;
+	}
+
+	private double getColumnProductSumPenalty() {
+		int n = solution.length;
+		double penalty = 0;
+
+		double expectedSum = n * (n + 1) / 2.0;
+		double expectedProduct = 1.0;
+		for(int i = 1; i <= n; i++) expectedProduct *= i;
+
+		// get the product and sum penalty for cols
+		for(int c = 0; c < n; c++) {
+			double sum = 0, product = 1;
+			for(int r = 0; r < n; r++) {
+				sum += solution[r][c][0];
+				product *= solution[r][c][0];
+			}
+			penalty += Math.abs(sum - expectedSum);
+			penalty += Math.abs(Math.log(product) - Math.log(expectedProduct));
+		}
+		return penalty;
+	}
+
+	private double getSubgridProductSumPenalty() {
+		int n = solution.length;
+		int subSize = (int) Math.sqrt(n);
+
+		double penalty = 0;
+		double expectedSum = n * (n + 1) / 2.0;
+		double expectedProduct = 1.0;
+		for(int i = 1; i <= n; i++) expectedProduct *= i;
+
+		// get the product and sum penalty for sub-grids
+		for (int sr = 0; sr < n; sr += subSize) {
+			for (int sc = 0; sc < n; sc += subSize) {
+				double sum = 0, product = 1;
+				for (int r = sr; r < sr + subSize; r++)
+					for (int c = sc; c < sc + subSize; c++) {
+						sum += solution[r][c][0];
+						product *= solution[r][c][0];
+					}
+				penalty += Math.abs(sum - expectedSum);
+				penalty += Math.abs(Math.log(product) - Math.log(expectedProduct));
 			}
 		}
 		return penalty;

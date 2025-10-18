@@ -599,7 +599,7 @@ public class SudokuBee extends Thread{
 				// create a new result file
 				PrintResult printer = new PrintResult("results/.xls");
 				int sudoku[][][] = board.getSudokuArray();
-				ABC abc = new ABC(printer, sudoku, numEmp, numOnlook, numCycle);
+				ABC abc = new ABC(printer, sudoku, numEmp, numOnlook, numCycle, options.fp);
 				
 				// run the generation animation at the special panel
 				Animation animate = new Animation(sudoku, GP.special);
@@ -663,7 +663,7 @@ public class SudokuBee extends Thread{
 				String cycle = "", time = "";
 
 				// start the ABC 
-				ABC abc = new ABC(printer, board.getSudokuArray(),numEmp,numOnlook, numCycle);
+				ABC abc = new ABC(printer, board.getSudokuArray(),numEmp,numOnlook, numCycle, options.fp);
 				abc.start();
 				double startTime = printer.getTime();
 
