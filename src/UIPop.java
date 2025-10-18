@@ -21,14 +21,16 @@ public class UIPop extends generalPanel{
 		panel.setOpaque(false);
 		
 		if(size == 9)
-			nineButtons();
+			//nineButtons();
+			twentyFiveButtons();
 		else if(size == 16) 
 			sixteenButtons();
 		else
 			twentyFiveButtons();
 		
 
-		bg = addLabel(panel, "img/game control/"+size+"x"+size+".png",0,0);
+		//bg = addLabel(panel, "img/game control/"+size+"x"+size+".png",0,0);
+		bg = addLabel(panel, "img/game control/25x25.png",0,0);
 		field.grabFocus();
 	}
 
@@ -36,50 +38,54 @@ public class UIPop extends generalPanel{
 		btn = new JButton[9];
 		erase = addButton(panel, "img/box/misc/clear.png", 146,126);
 		cancel = addButton(panel, "img/box/misc/cancel.png", 293,126);
-		btn[0] = addButton(panel, "img/box/25x25/normal/1.png", 111,192);
-		btn[1] = addButton(panel, "img/box/25x25/normal/2.png", 184,192);
-		btn[2] = addButton(panel, "img/box/25x25/normal/3.png", 257,192);
-		btn[3] = addButton(panel, "img/box/25x25/normal/4.png", 330,192);
-		btn[4] = addButton(panel, "img/box/25x25/normal/5.png", 147,257);
-		btn[5] = addButton(panel, "img/box/25x25/normal/6.png", 220,257);
-		btn[6] = addButton(panel, "img/box/25x25/normal/7.png", 293,257);
-		btn[7] = addButton(panel, "img/box/25x25/normal/8.png", 184,322);
-		btn[8] = addButton(panel, "img/box/25x25/normal/9.png", 257,322);
+		btn[0] = addButton(panel, "img/box/12x12/normal/1.png", 111,192);
+		btn[1] = addButton(panel, "img/box/12x12/normal/2.png", 184,192);
+		btn[2] = addButton(panel, "img/box/12x12/normal/3.png", 257,192);
+		btn[3] = addButton(panel, "img/box/12x12/normal/4.png", 330,192);
+		btn[4] = addButton(panel, "img/box/12x12/normal/5.png", 147,257);
+		btn[5] = addButton(panel, "img/box/12x12/normal/6.png", 220,257);
+		btn[6] = addButton(panel, "img/box/12x12/normal/7.png", 293,257);
+		btn[7] = addButton(panel, "img/box/12x12/normal/8.png", 184,322);
+		btn[8] = addButton(panel, "img/box/12x12/normal/9.png", 257,322);
 		field = addTextField(panel, "", 220, 128,40,38);
 	}
 
 	private void sixteenButtons(){
 		btn = new JButton[16];
-		erase = addButton(panel, "img/box/misc/clear.png", 184,126);
-		cancel = addButton(panel, "img/box/misc/cancel.png", 256,126);
-		btn[0] = addButton(panel, "img/box/25x25/normal/1.png", 147,192);
-		btn[1] = addButton(panel, "img/box/25x25/normal/2.png", 221,192);
-		btn[2] = addButton(panel, "img/box/25x25/normal/3.png", 295,192);
-		btn[3] = addButton(panel, "img/box/25x25/normal/4.png", 183,257);
-		btn[4] = addButton(panel, "img/box/25x25/normal/5.png", 257,257);
-		btn[5] = addButton(panel, "img/box/25x25/normal/6.png", 221,322);
-		btn[6] = addButton(panel, "img/box/25x25/normal/7.png", 221,322);
-		btn[7] = addButton(panel, "img/box/25x25/normal/8.png", 147,192);
-		btn[8] = addButton(panel, "img/box/25x25/normal/9.png", 221,192);
-		btn[9] = addButton(panel, "img/box/25x25/normal/10.png", 295,192);
-		btn[10] = addButton(panel, "img/box/25x25/normal/11.png", 183,257);
-		btn[11] = addButton(panel, "img/box/25x25/normal/12.png", 257,257);
-		btn[12] = addButton(panel, "img/box/25x25/normal/13.png", 221,322);
-		btn[13] = addButton(panel, "img/box/25x25/normal/14.png", 147,192);
-		btn[14] = addButton(panel, "img/box/25x25/normal/15.png", 221,192);
-		btn[15] = addButton(panel, "img/box/25x25/normal/16.png", 295,192);
-		field = addTextField(panel, "", 221, 62,40,38);
+		int incrX = 58, incrY = 53;
+		int x1 = 116, x2 = 87;
+		int y = 198;
+		erase = addButton(panel, "img/box/misc/clear_16x16.png", 144,147);
+		cancel = addButton(panel, "img/box/misc/cancel_16x16.png", 319,147);
+		btn[0] = addButton(panel, "img/box/16x16/normal/1.png", x1, y);
+		btn[1] = addButton(panel, "img/box/16x16/normal/2.png", x1 + incrX, y);
+		btn[2] = addButton(panel, "img/box/16x16/normal/3.png", x1 + incrX * 2, y);
+		btn[3] = addButton(panel, "img/box/16x16/normal/4.png", x1 + incrX * 3, y);
+		btn[4] = addButton(panel, "img/box/16x16/normal/5.png", x1 + incrX * 4, y);
+		btn[5] = addButton(panel, "img/box/16x16/normal/6.png", x2,251);
+		btn[6] = addButton(panel, "img/box/16x16/normal/7.png", x2 + incrX, y + incrY);
+		btn[7] = addButton(panel, "img/box/16x16/normal/8.png", x2 + incrX * 2, y + incrY);
+		btn[8] = addButton(panel, "img/box/16x16/normal/9.png", x2 + incrX * 3, y + incrY);
+		btn[9] = addButton(panel, "img/box/16x16/normal/10.png", x2 + incrX * 4, y + incrY);
+		btn[10] = addButton(panel, "img/box/16x16/normal/11.png", x2 + incrX * 5, y + incrY);
+		btn[11] = addButton(panel, "img/box/16x16/normal/12.png", x1, y + incrY * 2);
+		btn[12] = addButton(panel, "img/box/16x16/normal/13.png", x1 + incrX, y + incrY * 2);
+		btn[13] = addButton(panel, "img/box/16x16/normal/14.png", x1 + incrX * 2, y + incrY * 2);
+		btn[14] = addButton(panel, "img/box/16x16/normal/15.png", x1 + incrX * 3, y + incrY * 2);
+		btn[15] = addButton(panel, "img/box/16x16/normal/16.png", x1 + incrX * 4, y + incrY * 2);
+		field = addTextField(panel, "", 230, 140,40,38);
 	}
 
+	// WORK IN PROGRESS
 	private void twentyFiveButtons(){
-		btn = new JButton[12];
-		erase = addButton(panel, "img/box/misc/clear.png", 111,126);
-		cancel = addButton(panel, "img/box/misc/cancel.png", 329,126);
-		btn[0] = addButton(panel, "img/box/25x25/normal/1.png", 74,192);
-		btn[1] = addButton(panel, "img/box/25x25/normal/2.png", 147,192);
-		btn[2] = addButton(panel, "img/box/25x25/normal/3.png", 220,192);
-		btn[3] = addButton(panel, "img/box/25x25/normal/4.png", 293,192);
-		btn[4] = addButton(panel, "img/box/25x25/normal/5.png", 366,192);
+		btn = new JButton[25];
+		erase = addButton(panel, "img/box/misc/clear_25x25.png", 173,130);
+		cancel = addButton(panel, "img/box/misc/cancel_25x25.png", 310,130);
+		btn[0] = addButton(panel, "img/box/25x25/normal/1.png", 154,170);
+		btn[1] = addButton(panel, "img/box/25x25/normal/2.png", 199,170);
+		btn[2] = addButton(panel, "img/box/25x25/normal/3.png", 244,170);
+		btn[3] = addButton(panel, "img/box/25x25/normal/4.png", 289,170);
+		btn[4] = addButton(panel, "img/box/25x25/normal/5.png", 366,170);
 		btn[5] = addButton(panel, "img/box/25x25/normal/6.png", 111,257);
 		btn[6] = addButton(panel, "img/box/25x25/normal/7.png", 184,257);
 		btn[7] = addButton(panel, "img/box/25x25/normal/8.png", 257,257);
