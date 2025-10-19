@@ -31,6 +31,7 @@ import java.awt.Component;
 import java.awt.Cursor;
 import java.awt.FileDialog;
 import java.util.Calendar;
+import javax.swing.JSlider;
 
 public class generalPanel{
 	private JLabel bg;
@@ -169,7 +170,7 @@ public class generalPanel{
 		return button;
 	}
 
-	protected JButton addButton(Container pane, String string, String hover,int x, int y){
+	protected JButton addButton(Container pane, String string, String hover, int x, int y){
 		JButton button = new JButton();
 		Icon img = new ImageIcon(string);
 		button.setIcon(img);
@@ -222,6 +223,22 @@ public class generalPanel{
 		button.setContentAreaFilled(false);
 		button.setFont(new Font("Arial", Font.PLAIN, font));
 		return button;
+	}
+
+
+	protected JSlider addSlider(Container pane, int x, int y, int width, int height) {
+		// Create a slider: min = 0, max = 100, initial = 50
+        JSlider slider = new JSlider(0, 95, 10);
+		pane.add(slider);
+        // Optional: add ticks and labels
+		slider.setOpaque(false);
+		slider.setBounds(x, y, width, height);
+        slider.setMajorTickSpacing(10);
+        slider.setMinorTickSpacing(5);
+        slider.setPaintTicks(true);
+        slider.setPaintLabels(true);
+		slider.setSnapToTicks(true);
+		return slider;
 	}
 
 //JTextField

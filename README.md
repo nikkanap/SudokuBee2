@@ -17,10 +17,10 @@ This is the repository for Group 4's SudokuBee2 code.
   - [x] (default) Missing numbers with intrinsic sub-grid constraint
   - [x] Sum-Product with intrinsic sub-grid constraint
   - [x] Sum-Product without intrinsic sub-grid constraint
-- [ ] Implement random puzzle generation options:
-  - [ ] Percentage of given cells (0%-95%, default 10%, increments of 5%)
-  - [ ] Option to start from empty board or user-provided partially filled puzzle
-  - [ ] Verify puzzles for validity against Sudoku rules
+- [x] Implement random puzzle generation options:
+  - [x] Percentage of given cells (0%-95%, default 10%, increments of 5%)
+  - [x] Option to start from empty board or user-provided partially filled puzzle
+  - [x] Verify puzzles for validity against Sudoku rules
 - [ ] Modify experiment mode to:
   - [ ] Record time in seconds until stop (whether solved or not)
   - [ ] Record maximum cycles until stop (whether solved or not)

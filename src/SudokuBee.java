@@ -1,4 +1,6 @@
 import javax.swing.JFrame;
+import javax.swing.event.ChangeEvent;
+import javax.swing.event.ChangeListener;
 
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
@@ -19,6 +21,7 @@ import java.io.File;
 public class SudokuBee extends Thread{
 	private generalPanel GP;
 	private UIGame game;
+	private UIGenerate generation;
 	private UIExit exit;
 	private UIBoard board;
 	private UIStatus status;
@@ -29,10 +32,10 @@ public class SudokuBee extends Thread{
 	private UILoad load;
 	private UIHelp help;
 	private int btnX, btnY;
-	private int numOnlook, numEmp, numCycle;
+	private int numOnlook, numEmp, numCycle, percentOfGivenCells;
 
 	// isAns = indicates whether the board is in answer sheet mode or puzzle creation state
-	private boolean isAns = false, generate = true, startFlag =  false, gameMode = true, isSolved = false;
+	private boolean isAns = false, generate = true, startFlag =  false, gameMode = true, isSolved = false, fromEmpty;
 	private Tunog snd, error;
 	private JFrame frame = new JFrame();
 	private Container container = frame.getContentPane();
@@ -66,34 +69,8 @@ public class SudokuBee extends Thread{
 		// action listener for the play button
 		GP.play.addActionListener(new ActionListener(){
 			public void actionPerformed(ActionEvent e){
-				// opens up the sudoku game background
-				sop("Entered GP.play");
 				mainGame(); 
-				status("");
-				isAns = true;
-				int size = (int) (Math.pow(options.sz + 3, 2));
-				sop("size: " + size);
-
-				// generates the sudoku board
-				board(new int[size][size][2], true);
-
-				numEmp = 100;
-				numOnlook = 200;
-				numCycle = 100000000;
-				generate = true;
-				gameMode = true;
-				isSolved = false;
-
-				// starting the animation sequence
-				try{
-					start();
-				} catch(Exception ee){
-					startFlag = true;
-				}
-
-				// generates the popup for the numbers selection
-				popUp(size);
-				
+				generation();
 			}
 		});
 
@@ -165,10 +142,31 @@ public class SudokuBee extends Thread{
 		});
 	}
 
+	private void playGame() {
+		int size = (int) (Math.pow(options.sz + 3, 2));
+		numEmp = 100;
+		numOnlook = 200;
+		numCycle = 100000000;
+		generate = true;
+		gameMode = true;
+		isSolved = false;
+
+		// starting the animation sequence
+		try{
+			start();
+		} catch(Exception ee){
+			startFlag = true;
+		}
+
+		// generates the popup for the numbers selection
+		popUp(size);
+	}
+
 	// for loading a saved sudoku game
 	// USED IN menu() and status()
 	private void loadSudoku(int num){
 		// keeps the main menu on
+		sop("loadSudoku = " + num);
 		GP.setVisible(num);
 
 		// loading the UILoad on the GP.solve panel
@@ -627,7 +625,7 @@ public class SudokuBee extends Thread{
 					// generate a sudoku board with empty grids and
 					// display it in the board
 
-					GenerateSudoku gen = new GenerateSudoku(abc.getBestSolution());
+					GenerateSudoku gen = new GenerateSudoku(abc.getBestSolution(), percentOfGivenCells, fromEmpty);
 					board(gen.getSudoku(), false);
 
 					gen = null;
@@ -741,9 +739,8 @@ public class SudokuBee extends Thread{
 
 		// yes and no buttons shows up when clicking create game
 		// if yes, solidify the entered values and play the game
-		status.yes.addActionListener(new ActionListener(){
+		status.yes1.addActionListener(new ActionListener(){
 			public void actionPerformed(ActionEvent e){
-				sop("Entered status yes");
 				int sudoku[][][] = board.getSudokuArray();
 				Subgrid subgrid[] = new Subgrid[sudoku.length];
 				int subDimY = (int)Math.sqrt(sudoku.length);
@@ -786,9 +783,69 @@ public class SudokuBee extends Thread{
 		});
 
 		// exit the puzzle creation and return to main menu
-		status.no.addActionListener(new ActionListener(){
+		status.no1.addActionListener(new ActionListener(){
 			public void actionPerformed(ActionEvent e){
-				sop("Entered status no");
+				exit(1);
+			}
+		});
+
+
+		status.yes2.addActionListener(new ActionListener(){
+			public void actionPerformed(ActionEvent e){
+				int sudoku[][][] = board.getSudokuArray();
+				Subgrid subgrid[] = new Subgrid[sudoku.length];
+				int subDimY = (int)Math.sqrt(sudoku.length);
+				int subDimX = sudoku.length/subDimY;
+				
+				for(int ctr = 0, xCount = 0; ctr<sudoku.length; ctr++, xCount++){
+					subgrid[ctr] = new Subgrid(xCount*subDimX, ((ctr/subDimY)*subDimY), subDimX, subDimY);
+					if((ctr+1)%subDimY == 0 && ctr>0)
+						xCount =- 1;
+				}
+
+				Validator val = new Validator(sudoku, subgrid);
+				// if the created sudoku puzzle is valid, 
+				// then solidify the generated puzzle
+				if(val.checkValidity()){
+					isAns = true;
+					status.decompose();
+					status = null;
+					pop.decompose();
+					pop = null;
+					
+					status("");
+				}
+				else {
+					// display "Incorrect Puzzle"
+					exit(4);
+					return;
+				}
+
+				isSolved = false;
+
+				numEmp = 100;
+				numOnlook = 200;
+				numCycle = 100000000;
+				generate = true;
+				gameMode = true;
+				isSolved = false;
+
+				// starting the animation sequence
+				try{
+					start();
+				} catch(Exception ee){
+					startFlag = true;
+				}
+
+				// generates the popup for the numbers selection
+				int size = (int) (Math.pow(options.sz + 3, 2));
+				popUp(size);
+			}
+		});
+
+		// exit the puzzle creation and return to main menu
+		status.no2.addActionListener(new ActionListener(){
+			public void actionPerformed(ActionEvent e){
 				exit(1);
 			}
 		});
@@ -930,57 +987,30 @@ public class SudokuBee extends Thread{
 						System.exit(0);
 					// exiting the ongoing sudoku game
 					else if(exit.num == 1){
-						board.decompose();
-						board = null;
-						game.decompose();
-						game = null;
-						status.decompose();
-						status = null;
-						pop.decompose();
-						pop = null;
+						if(board != null){
+							board.decompose();
+							board = null;
+						}
+
+						if(game != null){
+							game.decompose();
+							game = null;
+						}
+
+						if(status != null){
+							status.decompose();
+							status = null;
+						}
+
+						if(pop != null){
+							pop.decompose();
+							pop = null;
+						}
 						GP.setVisible(7);
 					}
 					// exiting back to the sudoku game 
 					else if(exit.num == 2){
-						sop("Entered exit.num == 2");
-						board.decompose();
-						board = null;
-						game.decompose();
-						game = null;
-						status.decompose();
-						status = null;
-						pop.decompose();
-						pop = null;
-
-
-						// opens up the sudoku game background
-						mainGame(); 
-						sop("back to exit.num == 2");
-						status("");
-						isAns = true;
-						int size = (int) (Math.pow(options.sz + 3, 2));
-						sop("size = " + size);
-
-						// generates the sudoku board
-						board(new int[size][size][2], true);
-
-						numEmp = 100;
-						numOnlook = 200;
-						numCycle = 100000000;
-						generate = true;
-						gameMode = true;
-						isSolved = false;
-
-						// starting the animation sequence
-						try{
-							start();
-						} catch(Exception ee){
-							startFlag = true;
-						}
-
-						// generates the popup for the numbers selection
-						popUp(size);
-
+						generation();
 					}
 					// save the current progress of the file and 
 					// return to the sudoku game
@@ -1150,6 +1180,113 @@ public class SudokuBee extends Thread{
 			}
 		});
 	}
+
+	// for solving the sudoku puzzle
+	// USED IN mainGame() and exit()
+	private void generation(){
+		generation = new UIGenerate(GP.solve);
+
+		generation.okay.addActionListener(new ActionListener(){
+			public void actionPerformed(ActionEvent e){
+				sop("Entered exit.num == 2");
+				percentOfGivenCells = generation.sliderValue;
+				fromEmpty = (generation.modeNum == 0) ? false : true;
+
+				generation.decompose();
+				generation = null;
+				if(board != null){
+					board.decompose();
+					board = null;
+				}
+
+				if(game != null){
+					game.decompose();
+					game = null;
+				}
+
+				if(status != null){
+					status.decompose();
+					status = null;
+				}
+
+				if(pop != null){
+					pop.decompose();
+					pop = null;
+				}
+
+				if (fromEmpty) {
+					// opens up the sudoku game background
+					mainGame(); 
+
+					status("");
+					isAns = true;
+					int size = (int) (Math.pow(options.sz + 3, 2));
+					sop("size = " + size);
+
+					// generates the sudoku board
+					board(new int[size][size][2], true);
+
+					numEmp = 100;
+					numOnlook = 200;
+					numCycle = 100000000;
+					generate = true;
+					gameMode = true;
+					isSolved = false;
+
+					// starting the animation sequence
+					try{
+						start();
+					} catch(Exception ee){
+						startFlag = true;
+					}
+
+					// generates the popup for the numbers selection
+					popUp(size);
+				} else {
+					// opens up the sudoku game background
+					mainGame();
+
+					isAns = false;
+					int size = (int) (Math.pow(options.sz + 3, 2));
+					isSolved = false;
+					
+					// generates a sudoku board
+					board(new int[size][size][2], true);
+					game.setVisible(false);
+					status("fill");
+
+					popUp(size);
+				}
+			}
+		});
+
+		generation.cancel.addActionListener(new ActionListener(){
+			public void actionPerformed(ActionEvent e){
+				// hides the main menu buttons
+				GP.setVisibleButton(false);
+				
+				generation.decompose();
+				generation = null;
+				exit(1);
+			}
+			
+		});
+
+
+		generation.mode.addActionListener(new ActionListener(){
+			public void actionPerformed(ActionEvent e){
+				generation.changeMode();
+			}
+		});
+
+		generation.genSlider.addChangeListener(new ChangeListener() {
+			@Override
+			public void stateChanged(ChangeEvent e) {
+				generation.setSliderValue();
+			}
+		});
+	}
+
 
 	// shortcut for printing (System.out.println = sop)
 	private void sop(Object obj){

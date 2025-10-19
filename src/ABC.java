@@ -1,6 +1,5 @@
 import java.lang.Math;
 import java.util.Random;
-import javax.swing.JPanel;
 
 class ABC extends Thread{
 	private int[][][] problem;

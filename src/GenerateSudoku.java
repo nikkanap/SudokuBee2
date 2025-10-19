@@ -1,27 +1,97 @@
+import java.util.HashSet;
 import java.util.Random;
 
 class GenerateSudoku{
 	private int[][][] sudoku;
 	private Random rand=new Random();
 
-	GenerateSudoku(int[][][] sudoku){
+	private int n, totalCells, numGiven, numEmpty;
+
+	GenerateSudoku(int[][][] sudoku, int percentOfGivenCells, boolean fromEmpty){
+		sop("Entered Generate sudoku");
 		this.sudoku=sudoku;
-		for(int ctr=0; ctr<sudoku.length; ctr++){
-			for(int ct=ctr; ct<sudoku.length; ct++){
-				double first=rand.nextDouble(), second=rand.nextDouble();
-				if(first>1-second){
-					this.sudoku[ct][ctr][0]=0;
-					this.sudoku[ct][ctr][1]=1;
+		this.n = sudoku.length;
+		this.totalCells = n * n;
+		this.numGiven = (int) Math.round(totalCells * (percentOfGivenCells / 100.0));
+		this.numEmpty = totalCells - numGiven;
+
+		if(fromEmpty) {
+			sop("Creating from empty grid");
+			generateFromEmpty();
+		} else {
+			sop("Creating from filled grid");
+			generateFromFilled();
+		}
+	}
+
+
+	private void generateFromEmpty() {
+
+		// Randomly select which cells to KEEP (given cells)
+        HashSet<Integer> emptyIndices = new HashSet<>();
+        while (emptyIndices.size() < numEmpty) {
+            emptyIndices.add(rand.nextInt(totalCells)); // pick a random cell index
+        }
+
+		// mark chosen cells as empty
+        for (int index : emptyIndices) {
+            int row = index / n;
+            int col = index % n;
+
+            sudoku[row][col][0] = 0;
+            sudoku[row][col][1] = 1;
+        }
+
+		// mark the rest as given
+		for(int ctr=0; ctr<n; ctr++){
+			for(int ct=0; ct<n; ct++){
+				if(sudoku[ctr][ct][0] != 0 && sudoku[ctr][ct][1] == 1) {
+					sudoku[ctr][ct][1] = 0;
 				}
-				else{
-					this.sudoku[ct][ctr][1]=0;
+			}
+		}
+	}
+
+	private void generateFromFilled() {
+		int currentGiven = 0;
+
+		// count existing givens (non-zero values)
+        for (int i = 0; i < n; i++) {
+            for (int j = 0; j < n; j++) {
+                if (sudoku[i][j][1] == 0) {
+                    currentGiven++;
 				}
-				if(ct!=ctr && first>1-second){
-					this.sudoku[ctr][ct][0]=0;
-					this.sudoku[ctr][ct][1]=1;
-				}
-				else if(ct!=ctr){
-					this.sudoku[ctr][ct][1]=0;
+            }
+        }
+
+        // check rule: user-provided givens > max
+        if (currentGiven > numGiven) {
+            sop("Too little empty cells! (" + currentGiven + " < " + numGiven + ")");
+            return;
+        }
+
+        // remove cells for empty
+        HashSet<Integer> emptyIndices = new HashSet<>();
+		sop("numEmpty = " + numEmpty + ", emptIndices.size() = " + emptyIndices.size());
+        while (emptyIndices.size() < numEmpty) {
+			sop("entered while loop inside GenerateSudoku");
+            int row = rand.nextInt(n);
+            int col = rand.nextInt(n);
+			sop("grid value[0] = " + sudoku[row][col][0]);
+			sop("grid value[1] = " + sudoku[row][col][1]);
+            if (sudoku[row][col][0] != 0 && sudoku[row][col][1] == 1) {
+				sop("adding empty to grid["+row+"]["+col+"][0]");
+                sudoku[row][col][0] = 0;
+                sudoku[row][col][1] = 1;
+                emptyIndices.add(row * n + col);
+            }
+        }
+
+		// mark the rest as given
+		for(int ctr=0; ctr<n; ctr++){
+			for(int ct=0; ct<n; ct++){
+				if(sudoku[ctr][ct][0] != 0 && sudoku[ctr][ct][1] == 1) {
+					sudoku[ctr][ct][1] = 0;
 				}
 			}
 		}
