@@ -16,14 +16,12 @@ public class UIBoard{
 	UIBoard(){}
 
 	UIBoard(int sudokuArray[][][], JPanel pane){
-		sop("UIBOARD: constructor 1");
 		this.pane = pane;
 		this.sudokuArray = sudokuArray;
 		setConstants(false);
 	}
 
 	UIBoard(int sudokuArray[][][], boolean isNull, JPanel pane){
-		sop("UIBOARD: constructor 2");
 		this.pane = pane;
 		this.sudokuArray = sudokuArray;
 		ans = 0;
@@ -34,7 +32,6 @@ public class UIBoard{
 	}
 
 	private void fill(){
-		sop("UIBOARD: fill()");
 		size = sudokuArray.length;
 		sop("size = " + size);
 		for(int ctr = 0; ctr<size; ctr++){
@@ -46,15 +43,10 @@ public class UIBoard{
 	}
 
 	private void setConstants(boolean setCursor){
-		sop("UIBOARD: setConstants()");
 		size = sudokuArray.length;
-		sop("size = " + size);
 		startX = size/6+6;
-		sop("startX = " + startX);
 		startY = 86;
-		sop("startY = " + startY);
 		inc = increment[(int) (size/Math.sqrt(size)-3)];
-		sop("inc = " + inc);
 		btn = new JButton[size][size];
 		
 		for(int ctr = 0, X = startX, Y = startY; ctr<size; ctr++, Y += inc, X = startX){

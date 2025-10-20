@@ -7,7 +7,7 @@ class GenerateSudoku{
 
 	private int n, totalCells, numGiven, numEmpty;
 
-	GenerateSudoku(int[][][] sudoku, int percentOfGivenCells, boolean fromEmpty){
+	GenerateSudoku(int[][][] sudoku, int percentOfGivenCells, int chosenGrid){
 		sop("Entered Generate sudoku");
 		this.sudoku=sudoku;
 		this.n = sudoku.length;
@@ -15,18 +15,17 @@ class GenerateSudoku{
 		this.numGiven = (int) Math.round(totalCells * (percentOfGivenCells / 100.0));
 		this.numEmpty = totalCells - numGiven;
 
-		if(fromEmpty) {
+		if(chosenGrid == 1) {
 			sop("Creating from empty grid");
 			generateFromEmpty();
-		} else {
-			sop("Creating from filled grid");
-			generateFromFilled();
-		}
+			return;
+		} 
+
+		sop("Creating from filled grid");
+		generateFromFilled();
 	}
 
-
 	private void generateFromEmpty() {
-
 		// Randomly select which cells to KEEP (given cells)
         HashSet<Integer> emptyIndices = new HashSet<>();
         while (emptyIndices.size() < numEmpty) {
@@ -53,23 +52,6 @@ class GenerateSudoku{
 	}
 
 	private void generateFromFilled() {
-		int currentGiven = 0;
-
-		// count existing givens (non-zero values)
-        for (int i = 0; i < n; i++) {
-            for (int j = 0; j < n; j++) {
-                if (sudoku[i][j][1] == 0) {
-                    currentGiven++;
-				}
-            }
-        }
-
-        // check rule: user-provided givens > max
-        if (currentGiven > numGiven) {
-            sop("Too little empty cells! (" + currentGiven + " < " + numGiven + ")");
-            return;
-        }
-
         // remove cells for empty
         HashSet<Integer> emptyIndices = new HashSet<>();
 		sop("numEmpty = " + numEmpty + ", emptIndices.size() = " + emptyIndices.size());

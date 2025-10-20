@@ -16,18 +16,20 @@ public class UIExit extends generalPanel{
 		
 		yes = addButton(pane, "img/exit/yes.png", "img/exit/h_yes.png",291,326);
 		no = addButton(pane, "img/exit/no.png", "img/exit/h_no.png",455,325);
+
 		if(num != 6)
 			okay = addButton(pane, "img/exit/okay.png", "img/exit/h_okay.png",360,326);
 		else
 			okay = addButton(pane, "img/exit/okay.png", "img/exit/h_okay.png",360,411);
 		
-		if(num != 7 && num != 8)
+		if (num == 11) {
+			bg = addLabel(pane,"img/bg/"+back[4]+".png",100,174);
+		} else if (num != 7 && num != 8)
 			bg = addLabel(pane,"img/bg/"+back[num]+".png",100,174);
-		else if(num == 8){
+		else if (num == 8){
 			okay.setLocation(360,335);
 			bg = addLabel(pane,"img/bg/"+back[num]+".png",100,100);
-		}
-		else{
+		} else{
 			okay.setLocation(385,464);
 			bg = addLabel(pane,"img/bg/"+back[num]+".png",100,74);
 		}
