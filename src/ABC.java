@@ -1,3 +1,6 @@
+import java.io.FileWriter;
+import java.io.IOException;
+import java.io.PrintWriter;
 import java.lang.Math;
 import java.util.Random;
 
@@ -18,6 +21,11 @@ class ABC extends Thread{
 	private PrintResult printer;
 	private int fp;
 
+	private long startTime;
+	private long endTime;
+	private double elapsedTimeSeconds;
+	private boolean solutionFound;
+
 	ABC(PrintResult printer, int[][][] problem,int employedSize, int onlookerSize, int maxCycle, int fp){
 		System.out.println("USING FP " + fp);
 		//Setting of parameters
@@ -35,6 +43,9 @@ class ABC extends Thread{
 
 	// THREAD METHOD: runs when start() is called
 	public void run(){
+		startTime = System.nanoTime();
+		solutionFound = false;
+
 		Bee v;
 		double sumFitness = 0, beeFitness = 0;
 
@@ -102,7 +113,33 @@ class ABC extends Thread{
 			v = null;
 		}
 		printer.print((cycle) + "\t" + bestBee.getFitness());
+
+		endTime = System.nanoTime();
+		elapsedTimeSeconds = (endTime - startTime) / 1_000_000_000.0;
+		solutionFound = (maxFit == 1);
+		
+		printer.print((cycle) + "\t" + bestBee.getFitness());
+		
+		// NEW: Print summary
+		writeResultsToFile("ABC_Results.txt");
 	}
+
+	protected void writeResultsToFile(String filename) {
+		try (PrintWriter writer = new PrintWriter(new FileWriter(filename))) {
+			writer.println("=== ABC Algorithm Results ===");
+			writer.println("Time elapsed: " + elapsedTimeSeconds + " seconds");
+			writer.println("Cycles executed: " + cycle);
+			writer.println("Solution found: " + solutionFound);
+			writer.println("Best fitness: " + bestBee.getFitness());
+			writer.println("Max cycles allowed: " + maxCycle);
+			writer.println("Employed bees: " + employedSize);
+			writer.println("Onlooker bees: " + onlookerSize);
+			writer.println("============================\n");
+		} catch (IOException e) {
+			System.out.println("Error writing to file: " + e.getMessage());
+		}
+	}
+
 	
 	protected boolean isDone(){
 		if (cycle >= maxCycle ||maxFit == 1)

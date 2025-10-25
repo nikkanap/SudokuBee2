@@ -1,0 +1,10 @@
+=== ABC Algorithm Results ===
+Time elapsed: 0.3996179 seconds
+Cycles executed: 245
+Solution found: true
+Best fitness: 1.0
+Max cycles allowed: 100000
+Employed bees: 100
+Onlooker bees: 200
+============================
+
