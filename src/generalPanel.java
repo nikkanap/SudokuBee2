@@ -341,8 +341,8 @@ public class generalPanel{
 	}
 
 //JComboBox
-	protected JComboBox addJCombo(Container pane, String string[], int x, int y, int width, int height){
-		JComboBox comboBox = new JComboBox();
+	protected JComboBox<String> addJCombo(Container pane, String string[], int x, int y, int width, int height){
+		JComboBox<String> comboBox = new JComboBox<>();
 		for(int ctr = 0; ctr<string.length; ctr++)
 			comboBox.addItem(string[ctr]);
 		comboBox.setBounds(x, y, width, height);
@@ -350,8 +350,8 @@ public class generalPanel{
 		return comboBox;
 	}
 
-	protected JComboBox addJCombo(Container pane, String title,Object string[], int x, int y, int width, int height, int length){
-		JComboBox comboBox = new JComboBox();
+	protected JComboBox<Object> addJCombo(Container pane, String title,Object string[], int x, int y, int width, int height, int length){
+		JComboBox<Object> comboBox = new JComboBox<>();
 		comboBox.addItem(title);
 		for(int ctr = 0; ctr<length; ctr++)
 			comboBox.addItem(string[ctr]);
@@ -360,8 +360,8 @@ public class generalPanel{
 		return comboBox;
 	}
 
-	protected JComboBox addJCombo(Container pane, String title, Object string[], int x, int y, int width, int height){
-		JComboBox comboBox = new JComboBox();
+	protected JComboBox<String>addJCombo(Container pane, String title, Object string[], int x, int y, int width, int height){
+		JComboBox<String> comboBox = new JComboBox<>();
 		comboBox.addItem(title);
 		for(int ctr = 0; ctr<string.length; ctr++)
 			comboBox.addItem(string[ctr]+"");
@@ -430,8 +430,8 @@ public class generalPanel{
     	return spinner;
 	}
 
-	protected JList addList(Container pane, Object obj[]){
-		JList list = new JList();
+	protected JList<Object> addList(Container pane, Object obj[]){
+		JList<Object> list = new JList<>();
 		if(obj != null)
 			list.setListData(obj);
 		pane.add(list);
@@ -455,15 +455,15 @@ public class generalPanel{
 		return tab;
 	}
 
-	protected JList addList(Container pane, Object str[], int x, int y, int width, int height){
-		JList list = new JList(str);
+	protected JList<Object> addList(Container pane, Object str[], int x, int y, int width, int height){
+		JList<Object> list = new JList<>(str);
 		pane.add(list);
 		list.setBounds(x,y,width,height);
 		list.setFont(new Font("Arial", Font.BOLD, 25));
 		list.setVisibleRowCount(5);
 		list.setSelectionMode(javax.swing.ListSelectionModel.SINGLE_SELECTION);
 		list.setSelectionBackground(Color.orange);
-		list.setCellRenderer(new ListCellRenderer (){
+		list.setCellRenderer(new ListCellRenderer<Object> (){
 			public java.awt.Component getListCellRendererComponent(JList list,Object obj, int index, boolean isSelected, boolean hasFocus){
 				JLabel area = new JLabel();
 				area.setFont(new Font("Arial", Font.BOLD, 25));
