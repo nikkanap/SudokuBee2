@@ -61,6 +61,8 @@ public class UIOptions extends generalPanel{
 		sop("page " + page);
 		changePicture(upperOption, (page == 1) ? size[sz] : functionPenalty[fp]);
 		changePicture(lowerOption, (page == 1) ? sound[0] : "");
+		left[1].setVisible((page == 1));
+		right[1].setVisible((page == 1));
 		changePicture(bg, "img/bg/options_" + page + ".png");
 	}
 
