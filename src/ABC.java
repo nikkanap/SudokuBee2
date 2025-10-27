@@ -2,6 +2,8 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.lang.Math;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.Random;
 
 class ABC extends Thread{
@@ -16,7 +18,7 @@ class ABC extends Thread{
 	private Subgrid[] subgrid;
 	private Random rand = new Random();
 	private Fitness fit = new Fitness();
-	private String information = "";
+	private String information = "defaultresult";
 	private GreedySelection greedy = new GreedySelection();
 	private PrintResult printer;
 	private int fp;
@@ -121,12 +123,17 @@ class ABC extends Thread{
 		printer.print((cycle) + "\t" + bestBee.getFitness());
 		
 		// NEW: Print summary
-		writeResultsToFile("ABC_Results.txt");
+		// Add correct filename and path to save results
+		// also added timestamp to filename
+		LocalDateTime now = LocalDateTime.now();
+		String formattedTime = now.format(DateTimeFormatter.ofPattern("HHmmss"));
+		writeResultsToFile("results/" + information + "_" + formattedTime + ".txt");
 	}
 
 	protected void writeResultsToFile(String filename) {
 		try (PrintWriter writer = new PrintWriter(new FileWriter(filename))) {
 			writer.println("=== ABC Algorithm Results ===");
+			writer.println("Board Size: " + problem.length);
 			writer.println("Time elapsed: " + elapsedTimeSeconds + " seconds");
 			writer.println("Cycles executed: " + cycle);
 			writer.println("Solution found: " + solutionFound);
@@ -135,6 +142,14 @@ class ABC extends Thread{
 			writer.println("Employed bees: " + employedSize);
 			writer.println("Onlooker bees: " + onlookerSize);
 			writer.println("============================\n");
+			writer.println("Final Sudoku Board:\n");
+			int[][][] finalBoard = getBestSolution();
+			for (int i = 0; i < finalBoard.length; i++) {
+				for (int j = 0; j < finalBoard[i].length; j++) {
+					writer.print(finalBoard[i][j][0] + " ");
+				}
+				writer.println();
+			}
 		} catch (IOException e) {
 			System.out.println("Error writing to file: " + e.getMessage());
 		}
@@ -145,6 +160,10 @@ class ABC extends Thread{
 		if (cycle >= maxCycle ||maxFit == 1)
 			return true;
 		return false;
+	}
+
+	protected void setResultName(String info){
+		this.information = info;
 	}
 
 	private void initialization(){

@@ -6,6 +6,8 @@ import java.awt.event.MouseEvent;
 import java.awt.Container;
 import java.awt.Desktop;
 import java.io.IOException;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.io.File;
 
 public class SudokuBee extends Thread{
@@ -31,6 +33,7 @@ public class SudokuBee extends Thread{
 	private final JFrame frame = new JFrame();
 	private final Container container = frame.getContentPane();
 	private String saveFileName = "";
+	private String loadFileName = "";
 
 	public SudokuBee() {
 		frame.setTitle(" Sudoku Bee");
@@ -168,6 +171,7 @@ public class SudokuBee extends Thread{
 	// function used in loadSudoku()
 	private void open(String str) {
 		LoadSudoku sod = new LoadSudoku("save/"+str+".sav");
+		loadFileName = str;
 
 		if (sod.getStatus()) {
 			try {
@@ -515,6 +519,12 @@ public class SudokuBee extends Thread{
 				board.decompose();
 				board = null;
 
+				// Set the result file name in ABC provided that
+				// there is actually a load filename
+				if (!loadFileName.isBlank()) {
+					abc.setResultName(loadFileName);
+				}
+
 				// start the artificial bee colony thread
 				abc.start(); 
 
@@ -526,6 +536,8 @@ public class SudokuBee extends Thread{
 					delay(100);
 					animate.changePic(abc.getBestSolution());
 				}
+
+				int[][][] finalBoard = abc.getBestSolution();
 				
 				animate.decompose();
 				animate = null;
@@ -554,6 +566,7 @@ public class SudokuBee extends Thread{
 						board(abc.getBestSolution(), false);
 						isSolved = false;
 					}
+
 					abc = null;
 				}
 
