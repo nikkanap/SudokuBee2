@@ -1,0 +1,23 @@
+=== ABC Algorithm Results ===
+Board Size: 9
+Penalty Function: 0
+Time elapsed: 3.51655 seconds
+Cycles executed: 2540
+Solution found: true
+Best fitness: 1.0
+Max cycles allowed: 100000
+Employed bees: 100
+Onlooker bees: 200
+============================
+
+Final Sudoku Board:
+
+5 8 9 6 2 4 3 7 1 
+4 3 1 8 5 7 9 2 6 
+2 6 7 3 9 1 8 4 5 
+7 4 3 2 1 6 5 8 9 
+6 5 2 9 8 3 7 1 4 
+9 1 8 4 7 5 6 3 2 
+1 9 4 5 3 8 2 6 7 
+3 2 6 7 4 9 1 5 8 
+8 7 5 1 6 2 4 9 3 

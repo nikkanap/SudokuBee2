@@ -536,8 +536,6 @@ public class SudokuBee extends Thread{
 					delay(100);
 					animate.changePic(abc.getBestSolution());
 				}
-
-				int[][][] finalBoard = abc.getBestSolution();
 				
 				animate.decompose();
 				animate = null;
@@ -582,10 +580,16 @@ public class SudokuBee extends Thread{
 				PrintResult printer = new PrintResult(file);
 
 				status.setVisible(false);
-				String cycle = "", time = "";
 
 				// start the ABC 
 				ABC abc = new ABC(printer, board.getSudokuArray(),numEmp,numOnlook, numCycle, options.fp);
+
+				// Set the result file name in ABC provided that
+				// there is actually a load filename
+				if (!loadFileName.isBlank()) {
+					abc.setResultName(loadFileName);
+				}
+
 				abc.start();
 				double startTime = printer.getTime();
 

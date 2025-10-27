@@ -1,9 +1,9 @@
+import java.awt.Desktop;
+import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.lang.Math;
-import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
 import java.util.Random;
 
 class ABC extends Thread{
@@ -134,15 +134,26 @@ class ABC extends Thread{
 		// NEW: Print summary
 		// Add correct filename and path to save results
 		// also added timestamp to filename
-		LocalDateTime now = LocalDateTime.now();
-		String formattedTime = now.format(DateTimeFormatter.ofPattern("HHmmss"));
-		writeResultsToFile("results/" + information + "_" + formattedTime + ".txt");
+		String filename = "results/" + information + "_p" + fp + "_run";
+		int runNumber = 1;
+		File f;
+		do {
+			f = new File(filename + runNumber + ".txt");
+			runNumber++;
+		} while (f.exists());
+		filename = filename + (runNumber-1) + ".txt";
+		writeResultsToFile(filename);
+
+		try {
+			Desktop.getDesktop().open(new File(filename));
+		} catch (IOException e) {}
 	}
 
 	protected void writeResultsToFile(String filename) {
 		try (PrintWriter writer = new PrintWriter(new FileWriter(filename))) {
 			writer.println("=== ABC Algorithm Results ===");
 			writer.println("Board Size: " + problem.length);
+			writer.println("Penalty Function: " + fp);
 			writer.println("Time elapsed: " + elapsedTimeSeconds + " seconds");
 			writer.println("Cycles executed: " + cycle);
 			writer.println("Solution found: " + solutionFound);
