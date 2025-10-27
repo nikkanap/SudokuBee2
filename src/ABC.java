@@ -23,13 +23,17 @@ class ABC extends Thread{
 	private PrintResult printer;
 	private int fp;
 
+	private int stagnantCycles = 0;
+	private int stagnantLimit = 500; // you can tune this
+	private double lastBestFitness = 0.0;
+
+
 	private long startTime;
 	private long endTime;
 	private double elapsedTimeSeconds;
 	private boolean solutionFound;
 
 	ABC(PrintResult printer, int[][][] problem,int employedSize, int onlookerSize, int maxCycle, int fp){
-		System.out.println("USING FP " + fp);
 		//Setting of parameters
 		this.problem = problem;
 		this.maxCycle = maxCycle;
@@ -50,6 +54,10 @@ class ABC extends Thread{
 
 		Bee v;
 		double sumFitness = 0, beeFitness = 0;
+
+			
+		lastBestFitness = 0.0;
+		stagnantCycles = 0;
 
 		//actual
 		for(cycle = 0; cycle<maxCycle && maxFit != 1; cycle++){
@@ -111,6 +119,7 @@ class ABC extends Thread{
 					maxFit = getMaxFit(maxFit, bee[minSet[i]].getFitness(), minSet[i]);	//storing of best bee
 				}
 			}
+
 			printer.print((cycle + 1) + "\t" + bestBee.getFitness());
 			v = null;
 		}
@@ -182,6 +191,7 @@ class ABC extends Thread{
 		bestBee = new Bee(subgrid);
 		for(int ctr = 0; ctr<employedSize; ctr++){
 			bee[ctr] = new Bee(getProblemCopy(), subgrid);
+			
 			bee[ctr].setFitness(fit.calculateFitness(bee[ctr].getPenaltyValue(fp)));
 		}
 		bestBee.copyProblem(bee[0].getCopy());

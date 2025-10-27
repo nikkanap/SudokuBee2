@@ -31,6 +31,27 @@ class Bee{
 		}
 	}
 
+	protected void perturb(int numSwaps) {
+		int n = solution.length;
+		for (int i = 0; i < numSwaps; i++) {
+			int subgridNum = rand.nextInt(subgrid.length);
+			Subgrid g = subgrid[subgridNum];
+
+			int y1 = g.getStartY() + rand.nextInt(g.getDimY());
+			int x1 = g.getStartX() + rand.nextInt(g.getDimX());
+			int y2 = g.getStartY() + rand.nextInt(g.getDimY());
+			int x2 = g.getStartX() + rand.nextInt(g.getDimX());
+
+			if (solution[y1][x1][1] == 1 && solution[y2][x2][1] == 1) {
+				int temp = solution[y1][x1][0];
+				solution[y1][x1][0] = solution[y2][x2][0];
+				solution[y2][x2][0] = temp;
+			}
+		}
+	}
+
+
+
 	protected void copyProblem(int[][][] prob){
 		solution = prob;
 	}
@@ -115,18 +136,33 @@ class Bee{
 		// e.g. for a 4x4 grid, expectedProduct = 1 * 2 * 3 * 4 = 24
 		double expectedProduct = 1.0;
 		for(int i = 1; i <= n; i++) expectedProduct *= i;
+		expectedProduct = Math.log1p(expectedProduct);
 
 		// get the product and sum penalty for rows
 		for(int r = 0; r < n; r++) {
-			double sum = 0, product = 1;
+			double sum = 0, product = 1, rowPenalty = 0;
+			boolean[] seen = new boolean[n+1];
 			for(int c = 0; c < n; c++) {
-				sum += solution[r][c][0];
-				product *= solution[r][c][0];
+				int val = solution[r][c][0];
+				sum += val;
+				product *= val;
+				
+				if (val > 0 && val <= n) {
+					if (seen[val]) {
+						rowPenalty += 5;  // <-- should trigger for duplicates
+					} else {
+						seen[val] = true;
+					}
+				}
 			}
-			penalty += sum - expectedSum;
-			penalty += product - expectedProduct;
+			
+			rowPenalty += Math.abs(sum - expectedSum);
+        	rowPenalty += Math.abs(Math.log1p(product) - expectedProduct);
+			penalty += rowPenalty;
 		}
-		return penalty;
+		//System.out.println("total row penalty = " + penalty);
+		Math.nextUp(penalty); // forces computation (prevents lazy eval or skipping)
+    	return penalty;
 	}
 
 	private double getColumnProductSumPenalty() {
@@ -136,42 +172,81 @@ class Bee{
 		double expectedSum = n * (n + 1) / 2.0;
 		double expectedProduct = 1.0;
 		for(int i = 1; i <= n; i++) expectedProduct *= i;
+		expectedProduct = Math.log1p(expectedProduct);
 
 		// get the product and sum penalty for cols
 		for(int c = 0; c < n; c++) {
-			double sum = 0, product = 1;
+			double sum = 0, product = 1, colPenalty = 0;
+			boolean[] seen = new boolean[n+1];
 			for(int r = 0; r < n; r++) {
-				sum += solution[r][c][0];
-				product *= solution[r][c][0];
+				int val = solution[r][c][0];
+				sum += val;
+				product *= val;
+				
+				if (val > 0 && val <= n) {
+					if (seen[val]) {
+						colPenalty += 5;  // <-- should trigger for duplicates
+					} else {
+						seen[val] = true;
+					}
+				}
 			}
-			penalty += sum - expectedSum;
-			penalty += product - expectedProduct;
+			colPenalty += Math.abs(sum - expectedSum);
+        	colPenalty += Math.abs(Math.log1p(product) - expectedProduct);
+			penalty += colPenalty;
 		}
-		return penalty;
+		//System.out.println("total column penalty = " + penalty);
+		Math.nextUp(penalty); // forces computation (prevents lazy eval or skipping)
+    	return penalty;
 	}
 
 	private double getSubgridProductSumPenalty() {
 		int n = solution.length;
 		int subSize = (int) Math.sqrt(n);
+		//System.out.println("Subsize = " + subSize);
 
 		double penalty = 0;
 		double expectedSum = n * (n + 1) / 2.0;
 		double expectedProduct = 1.0;
 		for(int i = 1; i <= n; i++) expectedProduct *= i;
+		expectedProduct = Math.log1p(expectedProduct);
 
 		// get the product and sum penalty for sub-grids
 		for (int sr = 0; sr < n; sr += subSize) {
 			for (int sc = 0; sc < n; sc += subSize) {
+				boolean[] seen = new boolean[n+1];
 				double sum = 0, product = 1;
+				double subgridPenalty = 0;
+
+				//System.out.print("Subgrid (" + sr + "," + sc + "): ");
 				for (int r = sr; r < sr + subSize; r++)
 					for (int c = sc; c < sc + subSize; c++) {
-						sum += solution[r][c][0];
-						product *= solution[r][c][0];
+						int val = solution[r][c][0];
+						//System.out.println("value = " + val);
+						sum += val;
+						product *= (val == 0 ? 1 : val); // treat 0 as neutral for product
+
+						// 🧠 Penalize empties and duplicates properly
+						if (val <= 0 || val > n) {
+							subgridPenalty += 2; // invalid or missing value
+						} else if (seen[val]) {
+							subgridPenalty += 5; // duplicate detected
+						} else {
+							seen[val] = true;
+						}
+
 					}
-				penalty += sum - expectedSum;
-				penalty += product - expectedProduct;
+
+				subgridPenalty += Math.abs(sum - expectedSum);
+				//System.out.println("sum = " + sum + ", expectedSum = " + expectedSum + ", penalty = " + subgridPenalty);
+        		subgridPenalty += Math.abs(Math.log1p(product) - expectedProduct);
+				//System.out.println("product = " + Math.log1p(product) + ", expectedProduct = " + expectedProduct + ", penalty = " + subgridPenalty);
+				//System.out.println("Subgrid (" + sr + "," + sc + ") penalty = " + subgridPenalty);
+				penalty += subgridPenalty;
 			}
 		}
+		//System.out.println("total subgrid penalty = " + penalty);
+		Math.nextUp(penalty); // forces computation (prevents lazy eval or skipping)
 		return penalty;
 	}
 

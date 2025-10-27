@@ -55,12 +55,14 @@ class GenerateSudoku{
         // remove cells for empty
         HashSet<Integer> emptyIndices = new HashSet<>();
 		sop("numEmpty = " + numEmpty + ", emptIndices.size() = " + emptyIndices.size());
-        while (emptyIndices.size() < numEmpty) {
+        
+		while (emptyIndices.size() < numEmpty) {
 			sop("entered while loop inside GenerateSudoku");
             int row = rand.nextInt(n);
             int col = rand.nextInt(n);
 			sop("grid value[0] = " + sudoku[row][col][0]);
 			sop("grid value[1] = " + sudoku[row][col][1]);
+			
             if (sudoku[row][col][0] != 0 && sudoku[row][col][1] == 1) {
 				sop("adding empty to grid["+row+"]["+col+"][0]");
                 sudoku[row][col][0] = 0;

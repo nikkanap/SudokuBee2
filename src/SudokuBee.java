@@ -36,7 +36,7 @@ public class SudokuBee extends Thread{
 	private String loadFileName = "";
 
 	public SudokuBee() {
-		frame.setTitle(" Sudoku Bee");
+		frame.setTitle(" Sudoku Bee 2");
 		snd = new Tunog("snd/1.mid");
 		error = new Tunog("snd/error.wav");
 		snd.loop();
